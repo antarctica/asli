@@ -118,10 +118,9 @@ def plot_lows(
         if coastlines:
             ax.coastlines(resolution="110m")
 
-
         ## mark ASL
         time = pd.to_datetime(da_2D.valid_time.values)
-        time_str = time.strftime('%Y-%m-%d')
+        time_str = time.strftime("%Y-%m-%d")
         ax.set_title(time_str)
         df2 = df[df["time"] == time_str]
         df2.reset_index(inplace=True)
@@ -134,7 +133,13 @@ def plot_lows(
             # for a single point, use single color
             point_color_list = [point_color]
         for i in range(num_points):
-            ax.plot(df2["longitude"][i], df2["latitude"][i], color=point_color_list[i], marker="x", transform=ccrs.PlateCarree())
+            ax.plot(
+                df2["longitude"][i],
+                df2["latitude"][i],
+                color=point_color_list[i],
+                marker="x",
+                transform=ccrs.PlateCarree(),
+            )
 
         if regionbox:
             draw_regional_box(regionbox)

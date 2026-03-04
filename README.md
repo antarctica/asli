@@ -1,8 +1,8 @@
 # Amundsen Sea Low Index (ASLI)
 
-![GitHub License](https://img.shields.io/github/license/davidwilby/amundsen-sea-low-index)
-![Python Version from PEP 621 TOML](https://img.shields.io/python/required-version-toml?tomlFilePath=https%3A%2F%2Fraw.githubusercontent.com%2Fdavidwilby%2Famundsen-sea-low-index%2Fpackaging%2Fpyproject.toml)
-![tests](https://github.com/davidwilby/amundsen-sea-low-index/actions/workflows/tests.yml/badge.svg)
+![GitHub License](https://img.shields.io/github/license/davidwyld/amundsen-sea-low-index)
+![Python Version from PEP 621 TOML](https://img.shields.io/python/required-version-toml?tomlFilePath=https%3A%2F%2Fraw.githubusercontent.com%2Fdavidwyld%2Famundsen-sea-low-index%2Fpackaging%2Fpyproject.toml)
+![tests](https://github.com/davidwyld/amundsen-sea-low-index/actions/workflows/tests.yml/badge.svg)
 
 ![ASL image](asl.jpg) 
 
@@ -16,7 +16,7 @@ If using the `asli` package please cite both this repository (see "Cite this rep
 
 > Hosking, J. S., A. Orr, T. J. Bracegirdle, and J. Turner (2016), Future circulation changes off West Antarctica: Sensitivity of the Amundsen Sea Low to projected anthropogenic forcing, Geophys. Res. Lett., 43, 367–376, doi:10.1002/2015GL067143. 
 
-> Hosking, J. S., & Wilby, D. asli [Computer software]. https://github.com/scotthosking/amundsen-sea-low-index
+> Hosking, J. S., & Wyld, D. asli [Computer software]. https://github.com/scotthosking/amundsen-sea-low-index
 
 The ASL calculation is derived from ERA5 data downloaded from the Copernicus Climate Data Store. These should be cited as follows:
 
@@ -156,6 +156,7 @@ When making changes to the source code (including to the docs):
 
 1. Fork this repository on GitHub,
 1. Clone the package to your computer: `git clone https://github.com/<your-username>/amundsen-sea-low-index`
-1. Inside a virtual environment, install the package as an editable pip install, including the optional development dependencies: `pip install -e amundsen-sea-low-index[tests,docs,dev,s3]` (where `amundsen-sea-low-index` is the relative path to the cloned repository),
+1. Inside a virtual environment, install the package as an editable pip install: `pip install -e amundsen-sea-low-index` (where `amundsen-sea-low-index` is the relative path to the cloned repository),
+1. Also install the development dependency groups: `pip install --group test --group docs --group dev`
 1. Make your changes and run the tests using pytest: `pytest` and/or test the docs build using `jupyter-book build docs/`
 1. Commit and push your changes to GitHub and open a pull request.

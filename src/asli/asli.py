@@ -23,6 +23,7 @@ logger = logging.getLogger(__name__)
 
 __all__ = ["ASLICalculator"]
 
+
 def asl_sector_mean(
     da: xr.DataArray, mask: xr.DataArray, asl_region: Mapping[str, float] = ASL_REGION
 ) -> xr.DataArray:
@@ -42,10 +43,11 @@ def asl_sector_mean(
     )
 
 
-def get_lows(da: xr.DataArray,
-             mask: xr.DataArray,
-             minima: int = 1,
-             ) -> pd.DataFrame:
+def get_lows(
+    da: xr.DataArray,
+    mask: xr.DataArray,
+    minima: int = 1,
+) -> pd.DataFrame:
     """
     Finds local minima in data array da, ignoring land from land-sea mask, mask.
 
@@ -103,10 +105,22 @@ def get_lows(da: xr.DataArray,
     df["DataSource"] = "ERA5T" if da.expver.values == "0005" else "ERA5"
 
     ### Add relative central pressure (Hosking et al. 2013)
-    df["relative_central_pressure"] = df["actual_central_pressure"] - df["sector_pressure"]
+    df["relative_central_pressure"] = (
+        df["actual_central_pressure"] - df["sector_pressure"]
+    )
 
     ### re-order columns
-    df = df[["time", "longitude", "latitude", "actual_central_pressure", "sector_pressure", "relative_central_pressure", "DataSource"]]
+    df = df[
+        [
+            "time",
+            "longitude",
+            "latitude",
+            "actual_central_pressure",
+            "sector_pressure",
+            "relative_central_pressure",
+            "DataSource",
+        ]
+    ]
 
     ### clean-up DataFrame
     df = df.reset_index(drop=True)
@@ -114,7 +128,9 @@ def get_lows(da: xr.DataArray,
     return df
 
 
-def _get_lows_by_time(da: xr.DataArray, slice_by: str, t: int, mask: xr.DataArray, minima: int):
+def _get_lows_by_time(
+    da: xr.DataArray, slice_by: str, t: int, mask: xr.DataArray, minima: int
+):
     if slice_by == "season":
         da_t = da.isel(season=t)
     elif slice_by == "valid_time":
@@ -124,7 +140,9 @@ def _get_lows_by_time(da: xr.DataArray, slice_by: str, t: int, mask: xr.DataArra
 
 
 def define_minima_per_time_in_region(
-    df: pd.DataFrame, region: Mapping[str, float] = ASL_REGION, output_all_minima: bool = False
+    df: pd.DataFrame,
+    region: Mapping[str, float] = ASL_REGION,
+    output_all_minima: bool = False,
 ) -> pd.DataFrame:
     """
     From a dataframe of multiple minima per time period, selects the lowest minimum within each time period,
@@ -211,13 +229,13 @@ class ASLICalculator:
         # Check is the path is an s3 bucket
         if self.data_dir.startswith("s3://"):
             # Using utility function to set up s3 connection with the config file
-            # Passing s3 connection and specifying file bucket 
-            import s3fs
-            import zarr
+            # Passing s3 connection and specifying file bucket
+            import s3fs  # noqa
+            # import zarr #noqa
 
             s3_lsm_bucket = s3fs.S3Map(
                 os.path.join(self.data_dir, self.mask_filename),
-                s3 = configure_s3_bucket(self.s3_config_dir, self.s3_config_filename)
+                s3=configure_s3_bucket(self.s3_config_dir, self.s3_config_filename),
             )
 
             # Using open_zarr to read in files, ie. we are expecting .zarr NOT .nc
@@ -229,7 +247,7 @@ class ASLICalculator:
                 Path(self.data_dir, self.mask_filename)
             ).lsm.squeeze()
 
-    def read_msl_data(self, include_era5t: bool=False):
+    def read_msl_data(self, include_era5t: bool = False):
         """
         Reads in the MSL (mean sea level pressure) files from <data_dir>/<msl_pattern>.
         msl_pattern should be a file path under <data_dir> or a pattern (also within <data_dir>) as taken by xarray.open_mfdataset()
@@ -244,19 +262,17 @@ class ASLICalculator:
             return
 
         if self.data_dir.startswith("s3://"):
-            import s3fs
-            import zarr
+            import s3fs  # noqa
+            # import zarr #noqa
 
             s3_msl_bucket = s3fs.S3Map(
                 os.path.join(self.data_dir, self.msl_pattern),
-                s3 = configure_s3_bucket(self.s3_config_dir, self.s3_config_filename)
+                s3=configure_s3_bucket(self.s3_config_dir, self.s3_config_filename),
             )
 
             # Using open_zarr to read in files, ie. we are expecting .zarr NOT .nc
-            self.raw_msl_data = xr.open_zarr(
-                s3_msl_bucket, consolidated=True
-            ).msl
-        else:        
+            self.raw_msl_data = xr.open_zarr(s3_msl_bucket, consolidated=True).msl
+        else:
             raw_msl_data_path = os.path.join(self.data_dir, self.msl_pattern)
             self.raw_msl_data = xr.open_mfdataset(raw_msl_data_path).msl
 
@@ -281,7 +297,7 @@ class ASLICalculator:
         sliced_msl = sliced_msl / 100.0
         self.sliced_msl = sliced_msl.assign_attrs(units="hPa")
 
-    def read_data(self, include_era5t:bool = False):
+    def read_data(self, include_era5t: bool = False):
         """
         Convenience method for reading in both mask and msl data files.
 
@@ -304,7 +320,9 @@ class ASLICalculator:
         """
 
         if self.sliced_msl is None:
-            raise Exception(f"self.sliced_msl is {self.sliced_msl}, have you run .read_data()?")
+            raise Exception(
+                f"self.sliced_msl is {self.sliced_msl}, have you run .read_data()?"
+            )
 
         if "season" in self.sliced_msl.dims:
             ntime = 4
@@ -313,10 +331,14 @@ class ASLICalculator:
             ntime = self.sliced_msl.valid_time.shape[0]
             slice_by = "valid_time"
 
-        with tqdm_joblib(tqdm(total=ntime)) as progress_bar:
+        with tqdm_joblib(tqdm(total=ntime)) as progress_bar:  # noqa
             lows_per_time = joblib.Parallel(n_jobs=n_jobs)(
                 joblib.delayed(_get_lows_by_time)(
-                    self.sliced_msl, slice_by, t, self.land_sea_mask, num_minima,
+                    self.sliced_msl,
+                    slice_by,
+                    t,
+                    self.land_sea_mask,
+                    num_minima,
                 )
                 for t in range(ntime)
             )
@@ -355,8 +377,8 @@ class ASLICalculator:
             calculation_version=CALCULATION_VERSION,
             software_version=SOFTWARE_VERSION,
             date_created=datetime.datetime.now().strftime("%Y%m%d"),
-            time_coverage_start = self.asl_df['time'].min(),
-            time_coverage_end = self.asl_df['time'].max()
+            time_coverage_start=self.asl_df["time"].min(),
+            time_coverage_end=self.asl_df["time"].max(),
         )
 
         logger.info(f"Writing csv to {filepath}")
@@ -364,8 +386,9 @@ class ASLICalculator:
             f.writelines(header)
             self.asl_df.to_csv(f, index=False, header=None)
 
-
-    def import_from_csv(self, filename: Union[str, Path], header: int = 33, force: bool = False):
+    def import_from_csv(
+        self, filename: Union[str, Path], header: int = 33, force: bool = False
+    ):
         """
         Import a csv file exported from the .export_df method, for example to plot data from a previous session.
 
@@ -375,7 +398,9 @@ class ASLICalculator:
             force (bool, optional): Overwrite existing calculations in this object. Defaults to False.
         """
         if self.asl_df is not None and not force:
-            warnings.warn("Calculation dataframe has existing values, set force=True to overwrite with import.")
+            warnings.warn(
+                "Calculation dataframe has existing values, set force=True to overwrite with import."
+            )
             return
 
         filepath = os.path.join(self.data_dir, filename)
@@ -385,31 +410,34 @@ class ASLICalculator:
         # If we are reading from s3 we will need to call our configuration file
         if self.data_dir.startswith("s3://"):
             s3 = configure_s3_bucket(self.s3_config_dir, self.s3_config_filename)
-            
+
             self.asl_df = pd.read_csv(
-                s3.open('{}/{}'.format(self.data_dir, filename), mode='rb'),
-                header=header
-                )
+                s3.open("{}/{}".format(self.data_dir, filename), mode="rb"),
+                header=header,
+            )
         else:
             self.asl_df = pd.read_csv(filepath, header=header)
 
         self.asl_df.rename(
-            columns={'time (mo)': 'time',
-                     'longitude (degree)': 'longitude',
-                     'latitude (degree)': 'latitude',
-                     'actual_central_pressure (hPA)': 'ActCenPres',
-                     'sector_pressure (hPA)': 'SectPres',
-                     'relative_central_pressure (hPA) [b]': 'RelCenPres',
-                     },
-            inplace=True)
-
+            columns={
+                "time (mo)": "time",
+                "longitude (degree)": "longitude",
+                "latitude (degree)": "latitude",
+                "actual_central_pressure (hPA)": "ActCenPres",
+                "sector_pressure (hPA)": "SectPres",
+                "relative_central_pressure (hPA) [b]": "RelCenPres",
+            },
+            inplace=True,
+        )
 
     def plot_region_all(self, **kwargs):
         """Plots mean sea level pressure fields for the Amundsen Sea with identified low pressure and bounding box."""
 
         if self.asl_df is None:
-            raise Warning(f"ASL calculation dataframe is {self.as_df}, can not plot. \
-                          Try running .calculate() first.")
+            raise Warning(
+                f"ASL calculation dataframe is {self.as_df}, can not plot. \
+                          Try running .calculate() first."
+            )
         plot_lows(self.masked_msl_data, self.asl_df, regionbox=ASL_REGION, **kwargs)
 
     def plot_region_year(self, year: int, **kwargs):
@@ -419,16 +447,19 @@ class ASLICalculator:
             year (int): year to plot
         """
         if self.asl_df is None:
-            raise Warning(f"ASL calculation dataframe is {self.as_df}, can not plot. \
-                          Try running .calculate() first.")
-        
+            raise Warning(
+                f"ASL calculation dataframe is {self.as_df}, can not plot. \
+                          Try running .calculate() first."
+            )
+
         da = self.masked_msl_data.sel(
             valid_time=slice(str(year) + "0101", str(year) + "1201")
         )
 
-        df = self.asl_df[(
-            self.asl_df.time >= str(year)+"-01-01") & (self.asl_df.time <= str(year)+"-12-01"
-        )]
+        df = self.asl_df[
+            (self.asl_df.time >= str(year) + "-01-01")
+            & (self.asl_df.time <= str(year) + "-12-01")
+        ]
 
         return plot_lows(da, df, regionbox=ASL_REGION, **kwargs)
 
@@ -469,7 +500,7 @@ def _cli_common_args(parser: argparse.ArgumentParser) -> argparse.ArgumentParser
 
 def _get_cli_plot_args():
     """Parse command-line arguments for cli_plot()"""
-    
+
     parser = argparse.ArgumentParser(
         prog="asli_plot",
         description="Plot Amundsen sea low with mean sea level pressure fields.",
@@ -486,7 +517,7 @@ def _get_cli_plot_args():
         "--year",
         nargs="?",
         type=int,
-        help="When present, plot only the year specified"
+        help="When present, plot only the year specified",
     )
     parser = _cli_common_args(parser)
 
@@ -505,7 +536,7 @@ def _get_cli_calc_args():
         "-e",
         "--era5t",
         action="store_true",
-        help="When present, this flag enables the inclusion of ERA5T initial release data as well as finalised ERA5 data."
+        help="When present, this flag enables the inclusion of ERA5T initial release data as well as finalised ERA5 data.",
     )
     parser.add_argument(
         "-n",
@@ -521,10 +552,11 @@ def _get_cli_calc_args():
         type=int,
         nargs="?",
         default=1,
-        help="Max number of minima to locate in pressure field per time step."
+        help="Max number of minima to locate in pressure field per time step.",
     )
-    
+
     return parser.parse_args()
+
 
 def _cli_plot():
     """Command-line interface to ASLI plotting."""
@@ -538,14 +570,15 @@ def _cli_plot():
     if args.input:
         a.import_from_csv(args.input)
     else:
-        a.calculate()    
-    # Plot all if no specific year is provided    
+        a.calculate()
+    # Plot all if no specific year is provided
     if args.year:
         a.plot_region_year(args.year)
-    else:    
+    else:
         a.plot_region_all()
     if args.output:
         plt.savefig(os.path.join(args.datadir, args.output))
+
 
 def _cli_calc():
     """Command-line interface to ASL calculation."""

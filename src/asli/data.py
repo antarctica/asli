@@ -11,14 +11,11 @@ from .params import ASL_REGION
 
 logger = logging.getLogger(__name__)
 
-__all__ = [
-    "CDSDownloader",
-    "get_era5_monthly",
-    "get_land_sea_mask"
-]
+__all__ = ["CDSDownloader", "get_era5_monthly", "get_land_sea_mask"]
 
 DEFAULT_START_YEAR = 1953
 DEFAULT_END_YEAR = datetime.now().year
+
 
 class CDSDownloader:
     def __init__(
@@ -56,7 +53,7 @@ def get_era5_monthly(
     area: dict = ASL_REGION,
     border: float = None,
 ) -> None:
-    __doc__=f"""
+    """
     Download the ERA5 monthly averaged variables from the Climate Data Store (CDS).
     Uses the CDS API beta and therefore requires CDS account and API key.
     Please see the CDS API documentation: https://cds-beta.climate.copernicus.eu/how-to-api

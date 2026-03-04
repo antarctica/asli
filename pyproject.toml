@@ -7,7 +7,7 @@ name = "asli"
 version = "0.1.0"
 authors = [
     {name = "J. Scott Hosking", email="jshosking@gmail.com"},
-    {name = "David Wilby", email="dalby@bas.ac.uk"},
+    {name = "David Wyld", email="dalby@bas.ac.uk"},
     {name = "Thomas Zwagerman", email="thozwa@bas.ac.uk"}
 ]
 description = "Amundsen Sea Low detection from mean sea level pressure fields."
@@ -32,6 +32,12 @@ dependencies = [
     "jinja2"
 ]
 
+[project.optional-dependencies]
+s3 = [
+    "s3fs",
+    "zarr"
+]
+
 [tool.setuptools.packages.find]
 where = ["src"]
 
@@ -42,19 +48,16 @@ asli = ["templates/asli_data.csv.template"]
 Source = "https://github.com/scotthosking/amundsen-sea-low-index"
 Bug_Tracker = "https://github.com/scotthosking/amundsen-sea-low-index/issues"
 
-[project.optional-dependencies]
-tests = [
+[dependency-groups]
+test = [
     "pytest"
 ]
 docs = [
     "jupyter-book"
 ]
 dev = [
+    "pre-commit",
     "ruff"
-]
-s3 = [
-    "s3fs",
-    "zarr"
 ]
 
 [project.scripts]

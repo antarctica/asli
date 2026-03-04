@@ -1,11 +1,13 @@
 """Amundsen Sea Low detection from mean sea level pressure fields."""
 
 # Import the asli class here for nicer namespace
-from .asli import ASLICalculator
+from .asli import ASLICalculator  # noqa
 
-from . import data, plot, utils
+from . import data, plot, utils  # noqa
 
-from .params import CALCULATION_VERSION, ASL_REGION, SOFTWARE_VERSION
+from .params import CALCULATION_VERSION, ASL_REGION, SOFTWARE_VERSION  # noqa
 
-import os, logging
-logging.basicConfig(level=os.environ.get('ASLI_LOGLEVEL', 'INFO').upper())
+import logging
+import os
+
+logging.basicConfig(level=os.environ.get("ASLI_LOGLEVEL", "INFO").upper())
