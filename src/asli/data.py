@@ -11,14 +11,11 @@ from .params import ASL_REGION
 
 logger = logging.getLogger(__name__)
 
-__all__ = [
-    "CDSDownloader",
-    "get_era5_monthly",
-    "get_land_sea_mask"
-]
+__all__ = ["CDSDownloader", "get_era5_monthly", "get_land_sea_mask"]
 
 DEFAULT_START_YEAR = 1953
 DEFAULT_END_YEAR = datetime.now().year
+
 
 class CDSDownloader:
     def __init__(
