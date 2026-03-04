@@ -213,7 +213,7 @@ class ASLICalculator:
             # Using utility function to set up s3 connection with the config file
             # Passing s3 connection and specifying file bucket 
             import s3fs #noqa
-            import zarr #noqa
+            # import zarr #noqa
 
             s3_lsm_bucket = s3fs.S3Map(
                 os.path.join(self.data_dir, self.mask_filename),
@@ -245,7 +245,7 @@ class ASLICalculator:
 
         if self.data_dir.startswith("s3://"):
             import s3fs #noqa
-            import zarr #noqa
+            # import zarr #noqa
 
             s3_msl_bucket = s3fs.S3Map(
                 os.path.join(self.data_dir, self.msl_pattern),

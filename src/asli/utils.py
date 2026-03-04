@@ -1,8 +1,10 @@
 import contextlib
 import joblib
+import logging
 import os
 import configparser
 
+logger = logging.getLogger(__name__)
 
 # https://stackoverflow.com/questions/24983493/tracking-progress-of-joblib-parallel-execution
 @contextlib.contextmanager
@@ -31,7 +33,11 @@ def configure_s3_bucket(
     
     configfile_filepath(str): location of s3 config file, needs to contain 'secret_key', 'access_key' and 'host_bucket' (without https:// prefix)
     """
-    import s3fs
+    try:
+        import s3fs
+    except ImportError:
+        raise ImportError("s3fs package not found. Install directly with pip install s3fs. You probably need to install zarr as well: pip install zarr.")
+    
     config = configparser.ConfigParser()
     config_file = os.path.join(s3_config_filepath, s3_config_filename)
     config.read(config_file)
