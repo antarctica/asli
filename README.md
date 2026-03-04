@@ -1,8 +1,8 @@
 # Amundsen Sea Low Index (ASLI)
 
-![GitHub License](https://img.shields.io/github/license/davidwilby/amundsen-sea-low-index)
-![Python Version from PEP 621 TOML](https://img.shields.io/python/required-version-toml?tomlFilePath=https%3A%2F%2Fraw.githubusercontent.com%2Fdavidwilby%2Famundsen-sea-low-index%2Fpackaging%2Fpyproject.toml)
-![tests](https://github.com/davidwilby/amundsen-sea-low-index/actions/workflows/tests.yml/badge.svg)
+![GitHub License](https://img.shields.io/github/license/davidwyld/amundsen-sea-low-index)
+![Python Version from PEP 621 TOML](https://img.shields.io/python/required-version-toml?tomlFilePath=https%3A%2F%2Fraw.githubusercontent.com%2Fdavidwyld%2Famundsen-sea-low-index%2Fpackaging%2Fpyproject.toml)
+![tests](https://github.com/davidwyld/amundsen-sea-low-index/actions/workflows/tests.yml/badge.svg)
 
 ![ASL image](asl.jpg) 
 
@@ -16,7 +16,7 @@ If using the `asli` package please cite both this repository (see "Cite this rep
 
 > Hosking, J. S., A. Orr, T. J. Bracegirdle, and J. Turner (2016), Future circulation changes off West Antarctica: Sensitivity of the Amundsen Sea Low to projected anthropogenic forcing, Geophys. Res. Lett., 43, 367–376, doi:10.1002/2015GL067143. 
 
-> Hosking, J. S., & Wilby, D. asli [Computer software]. https://github.com/scotthosking/amundsen-sea-low-index
+> Hosking, J. S., & Wyld, D. asli [Computer software]. https://github.com/scotthosking/amundsen-sea-low-index
 
 The ASL calculation is derived from ERA5 data downloaded from the Copernicus Climate Data Store. These should be cited as follows:
 
