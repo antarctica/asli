@@ -212,8 +212,8 @@ class ASLICalculator:
         if self.data_dir.startswith("s3://"):
             # Using utility function to set up s3 connection with the config file
             # Passing s3 connection and specifying file bucket 
-            import s3fs
-            import zarr
+            import s3fs #noqa
+            import zarr #noqa
 
             s3_lsm_bucket = s3fs.S3Map(
                 os.path.join(self.data_dir, self.mask_filename),
@@ -244,8 +244,8 @@ class ASLICalculator:
             return
 
         if self.data_dir.startswith("s3://"):
-            import s3fs
-            import zarr
+            import s3fs #noqa
+            import zarr #noqa
 
             s3_msl_bucket = s3fs.S3Map(
                 os.path.join(self.data_dir, self.msl_pattern),
@@ -313,7 +313,7 @@ class ASLICalculator:
             ntime = self.sliced_msl.valid_time.shape[0]
             slice_by = "valid_time"
 
-        with tqdm_joblib(tqdm(total=ntime)) as progress_bar:
+        with tqdm_joblib(tqdm(total=ntime)) as progress_bar: #noqa
             lows_per_time = joblib.Parallel(n_jobs=n_jobs)(
                 joblib.delayed(_get_lows_by_time)(
                     self.sliced_msl, slice_by, t, self.land_sea_mask, num_minima,

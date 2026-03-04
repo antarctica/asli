@@ -56,7 +56,7 @@ def get_era5_monthly(
     area: dict = ASL_REGION,
     border: float = None,
 ) -> None:
-    __doc__=f"""
+    """
     Download the ERA5 monthly averaged variables from the Climate Data Store (CDS).
     Uses the CDS API beta and therefore requires CDS account and API key.
     Please see the CDS API documentation: https://cds-beta.climate.copernicus.eu/how-to-api

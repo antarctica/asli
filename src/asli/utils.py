@@ -1,9 +1,7 @@
 import contextlib
 import joblib
 import os
-import sys
 import configparser
-from pathlib import Path
 
 
 # https://stackoverflow.com/questions/24983493/tracking-progress-of-joblib-parallel-execution
