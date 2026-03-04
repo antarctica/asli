@@ -32,6 +32,12 @@ dependencies = [
     "jinja2"
 ]
 
+[project.optional-dependencies]
+s3 = [
+    "s3fs",
+    "zarr"
+]
+
 [tool.setuptools.packages.find]
 where = ["src"]
 
@@ -42,8 +48,8 @@ asli = ["templates/asli_data.csv.template"]
 Source = "https://github.com/scotthosking/amundsen-sea-low-index"
 Bug_Tracker = "https://github.com/scotthosking/amundsen-sea-low-index/issues"
 
-[project.optional-dependencies]
-tests = [
+[dependency-groups]
+test = [
     "pytest"
 ]
 docs = [
@@ -51,10 +57,6 @@ docs = [
 ]
 dev = [
     "ruff"
-]
-s3 = [
-    "s3fs",
-    "zarr"
 ]
 
 [project.scripts]
