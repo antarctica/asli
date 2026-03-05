@@ -13,9 +13,7 @@ from asli.data import (
     get_era5_monthly,
     get_land_sea_mask,
     _get_request_area,
-    _cli_data_common_args,
     _get_cli_lsm_args,
-    _cli_get_era5_monthly,
 )
 
 
@@ -104,13 +102,15 @@ class TestCDSDownloader(unittest.TestCase):
             }
         )
 
-        with patch.object(ecmwf.datastores.legacy_client.LegacyClient, "retrieve", return_value=None) as mock_method:
-            get_land_sea_mask(
-                data_dir=str(data_dir), area=area, border=border
-            )
+        with patch.object(
+            ecmwf.datastores.legacy_client.LegacyClient, "retrieve", return_value=None
+        ) as mock_method:
+            get_land_sea_mask(data_dir=str(data_dir), area=area, border=border)
 
         mock_method.assert_called_with(
-            "reanalysis-era5-single-levels-monthly-means", request_params, Path(data_dir, "era5_lsm.nc")
+            "reanalysis-era5-single-levels-monthly-means",
+            request_params,
+            Path(data_dir, "era5_lsm.nc"),
         )
 
     def test_get_era5_monthly(self):
@@ -122,7 +122,6 @@ class TestCDSDownloader(unittest.TestCase):
 
         request_params = {
             "format": "netcdf",
-            "product_type": "monthly_averaged_reanalysis",
             "variable": ["mean_sea_level_pressure"],
             "year": list(map(str, list(range(start_year, end_year + 1, 1)))),
             "month": [
@@ -155,10 +154,12 @@ class TestCDSDownloader(unittest.TestCase):
             }
         )
 
-        output_filename = f"ERA5/monthly/era5_mean_sea_level_pressure_monthly_{start_year}-{end_year}.nc"
+        output_filename = f"era5/monthly/era5_mean_sea_level_pressure_monthly_{start_year}-{end_year}.nc"
         output_path = Path(data_dir, output_filename)
 
-        with patch.object(ecmwf.datastores.legacy_client.LegacyClient, "retrieve", return_value=None) as mock_method:
+        with patch.object(
+            ecmwf.datastores.legacy_client.LegacyClient, "retrieve", return_value=None
+        ) as mock_method:
             get_era5_monthly(
                 data_dir=data_dir,
                 start_year=start_year,
