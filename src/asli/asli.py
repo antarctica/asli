@@ -69,6 +69,9 @@ def get_lows(
     datetime_values = pd.to_datetime(da.valid_time.values)
     time_str = datetime_values.strftime("%Y-%m-%d")
 
+    # ensure that expver value of mask doesn't impact masking
+    mask = mask.reset_coords("expver", drop=True)
+
     # fill land in with highest value to limit lows being found here
     da_max = da.max().values
     da = da.where(mask < MASK_THRESHOLD).fillna(da_max)
@@ -102,7 +105,20 @@ def get_lows(
     df["actual_central_pressure"] = pressure
     df["sector_pressure"] = sector_mean_pres
     df["time"] = time_str
-    df["DataSource"] = "ERA5T" if da.expver.values == "0005" else "ERA5"
+
+    if hasattr(da, "expver"):
+        if da.expver.values == "0001":
+            df["DataSource"] = "ERA5"
+        elif da.expver.values == "0005":
+            df["DataSource"] = "ERA5T"
+        else:
+            df["DataSource"] = str(da.expver.values)
+    else:
+        logger.warning(
+            f"Cannot determine DataSource for {time_str}. Setting DataSource to UNKNOWN for this row."
+        )
+        df["DataSource"] = "UNKNOWN"
+        logger.debug(da)
 
     ### Add relative central pressure (Hosking et al. 2013)
     df["relative_central_pressure"] = (
