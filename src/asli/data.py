@@ -80,7 +80,7 @@ def get_era5_monthly(
 
     request_params = {
         "format": "netcdf",
-        "product_type": "monthly_averaged_reanalysis",
+        # "product_type": "monthly_averaged_reanalysis",
         "variable": variables,
         "year": list(map(str, list(range(start_year, end_year + 1, 1)))),
         "month": [
@@ -100,10 +100,19 @@ def get_era5_monthly(
         "time": "00:00",
     }
 
+    # make the data subdirectory if needed
+    era5_monthly_dir = Path("era5", "monthly")
+    Path(data_dir, era5_monthly_dir).mkdir(parents=True, exist_ok=True)
+
     data_downloader = CDSDownloader(
         data_dir,
         request_params=request_params,
-        output_filename=f"ERA5/monthly/era5_{'_'.join(variables)}_monthly_{start_year}-{end_year}.nc",
+        output_filename=str(
+            Path(
+                era5_monthly_dir,
+                f"era5_{'_'.join(variables)}_monthly_{start_year}-{end_year}.nc",
+            )
+        ),
         area=_get_request_area(area, border),
     )
     data_downloader.download()
