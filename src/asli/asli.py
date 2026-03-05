@@ -211,6 +211,13 @@ def season_mean(ds, calendar="standard"):
 class ASLICalculator:
     """
     Object to handle calculations of the Amundsen Sea Low Index
+
+    Args:
+        data_dir(str): Path to root data directory.
+        mask_filename(str): filename for land-sea mask.
+        msl_pattern(str): relative to data_dir, the filename or filename glob pattern for files containing mean sea level pressure data.
+        s3_config_dir(str): path to directory containing the s3 config, if used.
+        s3_config_filename(str): filename for the s3 config, if used.
     """
 
     def __init__(
@@ -321,7 +328,7 @@ class ASLICalculator:
 
         Args:
             n_jobs (int, optional): Number of processes to use for parallel calculation. Defaults to 1.
-            minima (int, optimal): Max number of minima to locate in pressure field per time step. Default: 1.
+            num_minima (int, optimal): Max number of minima to locate in pressure field per time step. Default: 1.
 
         Returns:
             pd.DataFrame: dataframe containing locations of pressure minima, mean pressure.

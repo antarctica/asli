@@ -54,7 +54,11 @@ test = [
     "pytest-cov",
 ]
 docs = [
-    "jupyter-book"
+    "mkdocs",
+    "mkdocs-mmaterial",
+    "mkdocs-autoapi[python]",
+    "mkdocstrings[python]",
+    "mkdocs-include-markdown-plugin",
 ]
 dev = [
     "pre-commit",
