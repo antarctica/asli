@@ -107,7 +107,12 @@ def get_lows(
     df["time"] = time_str
 
     if hasattr(da, "expver"):
-        df["DataSource"] = "ERA5T" if da.expver.values == "0005" else "ERA5"
+        if da.expver.values == "0001":
+            df["DataSource"] = "ERA5"
+        elif da.expver.values == "0005":
+            df["DataSource"] = "ERA5T"
+        else:
+            df["DataSource"] = str(da.expver.values)
     else:
         logger.warning(
             f"Cannot determine DataSource for {time_str}. Setting DataSource to UNKNOWN for this row."
