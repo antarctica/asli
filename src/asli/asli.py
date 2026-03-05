@@ -102,7 +102,15 @@ def get_lows(
     df["actual_central_pressure"] = pressure
     df["sector_pressure"] = sector_mean_pres
     df["time"] = time_str
-    df["DataSource"] = "ERA5T" if da.expver.values == "0005" else "ERA5"
+
+    if hasattr(da, "expver"):
+        df["DataSource"] = "ERA5T" if da.expver.values == "0005" else "ERA5"
+    else:
+        logger.warning(
+            f"Cannot determine DataSource for {time_str}. Setting DataSource to UNKNOWN for this row."
+        )
+        df["DataSource"] = "UNKNOWN"
+        logger.debug(da)
 
     ### Add relative central pressure (Hosking et al. 2013)
     df["relative_central_pressure"] = (
