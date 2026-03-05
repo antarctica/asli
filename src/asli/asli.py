@@ -69,6 +69,9 @@ def get_lows(
     datetime_values = pd.to_datetime(da.valid_time.values)
     time_str = datetime_values.strftime("%Y-%m-%d")
 
+    # ensure that expver value of mask doesn't impact masking
+    mask = mask.reset_coords("expver", drop=True)
+
     # fill land in with highest value to limit lows being found here
     da_max = da.max().values
     da = da.where(mask < MASK_THRESHOLD).fillna(da_max)
