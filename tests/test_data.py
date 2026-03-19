@@ -122,6 +122,7 @@ class TestCDSDownloader(unittest.TestCase):
 
         request_params = {
             "format": "netcdf",
+            "product_type": "monthly_averaged_reanalysis",
             "variable": ["mean_sea_level_pressure"],
             "year": list(map(str, list(range(start_year, end_year + 1, 1)))),
             "month": [

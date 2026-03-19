@@ -2,6 +2,7 @@
 Parameters used by all modules
 """
 
+from datetime import datetime
 import importlib.metadata
 from types import MappingProxyType
 
@@ -17,3 +18,7 @@ ASL_REGION = MappingProxyType(
 
 # Threshold for land-sea mask percentage land per pixel
 MASK_THRESHOLD = 0.5
+
+# download degault params
+DEFAULT_START_YEAR = 1959
+DEFAULT_END_YEAR = datetime.now().year
