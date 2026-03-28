@@ -108,21 +108,67 @@ def _cli_get_land_sea_mask(args):
     )
 
 
-def _cli_data_common_args(parser: argparse.ArgumentParser) -> argparse.ArgumentParser:
-    """Adds options that are common to the data download CLIs"""
+def _cli_download(args):
+    """Interface for download operation. If --lsm flag is true, download land-sea mask; else download era5 variables."""
 
-    parser.add_argument(
+    if args.lsm:
+        _cli_get_land_sea_mask(args)
+    else:
+        _cli_get_era5_monthly(args)
+
+
+def _parse_args(parser: argparse.ArgumentParser):
+    """Parse command line arguments using argparse. Structured as this function for ease of testing."""
+    args = parser.parse_args()
+
+    # for download function, set the area dict based on options
+    if args.func is _cli_download:
+        if args.e is True:
+            logger.info("'-e' flag specified. Will download whole Earth.")
+            args.area_dict = None
+        else:
+            args.area_dict = {
+                "north": args.area[0],
+                "west": args.area[1],
+                "south": args.area[2],
+                "east": args.area[3],
+            }
+
+    return args
+
+
+def _top_level_parser() -> argparse.ArgumentParser:
+    parser = argparse.ArgumentParser(
+        prog="asli",
+        description="Command line interface to download source data, calculate and plot pressure minima using asli.",
+    )
+    subparsers = parser.add_subparsers(dest="command", help="Available subcommands")
+
+    # subcommand for downloading data
+    download_parser = subparsers.add_parser(
+        "download",
+        help="Download ERA5 or land-sea mask data from the Climate Data Store.",
+        description="Downloads the ERA5 monthly averaged data or land-sea mask from the Climate Data Store (CDS). \
+                    Uses the CDS API and therefore requires CDS account and API key. \
+                    Please see the CDS API documentation: https://cds.climate.copernicus.eu/api-how-to \
+                    If running for the first time, may require agreement to CDS T&Cs per dataset. See output for details. \
+                    \n \
+                    Downloads may queue for a considerable time depending on the CDS. \
+                    Request progress can be tracked through your CDS account at: https://cds.climate.copernicus.eu/cdsapp#!/yourrequests",
+    )
+    download_parser.set_defaults(func=_cli_download)
+    download_parser.add_argument(
         "-d",
         "--datadir",
         default="./data",
         help="Path to directory in which to put downloaded data. (Default: ./data)",
     )
-    parser.add_argument(
+    download_parser.add_argument(
         "-e",
         action="store_true",
         help="Download entire earth. i.e. don't restrict to bounds specified using '-a'.",
     )
-    parser.add_argument(
+    download_parser.add_argument(
         "-a",
         "--area",
         type=float,
@@ -136,7 +182,7 @@ def _cli_data_common_args(parser: argparse.ArgumentParser) -> argparse.ArgumentP
         help=f"Bounding coordinates for data download: N W S E. Optional. Overridden by '-e' option. \
                             (Default: bounds of Amundsen Sea: North: {ASL_REGION['north']}, West: {ASL_REGION['west']}, South: {ASL_REGION['south']}, East: {ASL_REGION['east']})",
     )
-    parser.add_argument(
+    download_parser.add_argument(
         "-b",
         "--border",
         type=float,
@@ -144,19 +190,39 @@ def _cli_data_common_args(parser: argparse.ArgumentParser) -> argparse.ArgumentP
         default=0.0,
         help="Additional border around <area> to download in degrees",
     )
+    download_parser.add_argument(
+        "--lsm",
+        action="store_true",
+        help="Download the land-sea mask, instead of the era5 variables. If this flag is present, vars, start, end will be ignored.",
+    )
+    download_parser.add_argument(
+        "-v",
+        "--vars",
+        nargs="?",
+        default="msl,",
+        help="comma-separated list of strings specifying variables to download. Can be one or more of 'msl' (default), 'tas', 'uas', \
+                        'vas' corresponding to 'mean_sea_level_pressure', '2m_temperature', '10m_u_component_of_wind', and '10m_v_component_of_wind', respectively.",
+    )
+    download_parser.add_argument(
+        "-s",
+        "--start",
+        default=DEFAULT_START_YEAR,
+        type=int,
+        help=f"Earliest year to download. (Default: {DEFAULT_START_YEAR})",
+    )
+    download_parser.add_argument(
+        "-n",
+        "--end",
+        default=DEFAULT_END_YEAR,
+        type=int,
+        help=f"Latest year to download. (Default: {DEFAULT_END_YEAR})",
+    )
 
-    return parser
-
-
-def cli():
-    """Main entrypoint for the CLI. Handles command line arguments and executes the corresponding function."""
-
-    parser = argparse.ArgumentParser(prog="asli")
-    subparsers = parser.add_subparsers()
-
+    # subcommand for running calculations
     calc_parser = subparsers.add_parser(
         "calc",
-        help="Calculates the Amundsen Sea Low from mean sea level pressure fields.",
+        help="Calculates the pressure minima index from mean sea level pressure fields.",
+        description="",
     )
     calc_parser.set_defaults(func=_cli_calc)
     calc_parser = _cli_common_args(calc_parser)
@@ -183,8 +249,11 @@ def cli():
         help="Max number of minima to locate in pressure field per time step.",
     )
 
+    # subcommand for plotting
     plot_parser = subparsers.add_parser(
-        "plot", help="Plot Amundsen sea low with mean sea level pressure fields."
+        "plot",
+        help="Plot pressure minima with mean sea level pressure fields.",
+        description="Takes an input CSV file containing pressure minima (output from calc subcommand) and mean sea level pressure field data and plots the output to file.",
     )
     plot_parser.set_defaults(func=_cli_plot)
     plot_parser = _cli_common_args(plot_parser)
@@ -203,72 +272,16 @@ def cli():
         help="When present, plot only the year specified",
     )
 
-    lsm_parser = subparsers.add_parser(
-        "lsm",
-        help="Downloads the ERA5 land-sea mask from the Climate Data Store (CDS). \
-                                Uses the CDS API and therefore requires CDS account and API key. \
-                                Please see the CDS API documentation: https://cds.climate.copernicus.eu/api-how-to \
-                                If running for the first time, may require agreement to CDS T&Cs per dataset. See output for details. \
-                                \n \
-                                Downloads may queue for a considerable time depending on the CDS. \
-                                Request progress can be tracked through your CDS account at: https://cds.climate.copernicus.eu/cdsapp#!/yourrequests",
-    )
-    lsm_parser.set_defaults(func=_cli_get_land_sea_mask)
-    lsm_parser = _cli_data_common_args(lsm_parser)
-    lsm_parser.add_argument(
-        "-f",
-        "--filename",
-        default="era5_lsm.nc",
-        help="Filename for data once downloaded. (Default: era5_lsm.nc)",
-    )
+    return parser
 
-    era5_parser = subparsers.add_parser(
-        "data",
-        help="Downloads the ERA5 monthly averaged data from the Climate Data Store (CDS). \
-                                Uses the CDS API and therefore requires CDS account and API key. \
-                                Please see the CDS API documentation: https://cds.climate.copernicus.eu/api-how-to \
-                                If running for the first time, may require agreement to CDS T&Cs per dataset. See output for details. \
-                                \n \
-                                Downloads may queue for a considerable time depending on the CDS. \
-                                Request progress can be tracked through your CDS account at: https://cds.climate.copernicus.eu/cdsapp#!/yourrequests",
-    )
-    era5_parser.set_defaults(func=_cli_get_era5_monthly)
-    era5_parser = _cli_data_common_args(era5_parser)
-    era5_parser.add_argument(
-        "-v",
-        "--vars",
-        nargs="?",
-        default="msl,",
-        help="comma-separated list of strings specifying variables to download. Can be one or more of 'msl' (default), 'tas', 'uas', \
-                        'vas' corresponding to 'mean_sea_level_pressure', '2m_temperature', '10m_u_component_of_wind', and '10m_v_component_of_wind', respectively.",
-    )
-    era5_parser.add_argument(
-        "-s",
-        "--start",
-        default=DEFAULT_START_YEAR,
-        type=int,
-        help=f"Earliest year to download. (Default: {DEFAULT_START_YEAR})",
-    )
-    era5_parser.add_argument(
-        "-n",
-        "--end",
-        default=DEFAULT_END_YEAR,
-        type=int,
-        help=f"Latest year to download. (Default: {DEFAULT_END_YEAR})",
-    )
 
-    args = parser.parse_args()
+def cli():
+    """Main entrypoint for the CLI. Handles command line arguments and executes the corresponding function."""
 
-    if args.func is _cli_get_era5_monthly or _cli_get_land_sea_mask:
-        if args.e is True:
-            logger.info("'-e' flag specified. Will download whole Earth.")
-            args.area_dict = None
-        else:
-            args.area_dict = {
-                "north": args.area[0],
-                "west": args.area[1],
-                "south": args.area[2],
-                "east": args.area[3],
-            }
+    parser = _top_level_parser()
 
+    # parse the command line arguments
+    args = _parse_args(parser)
+
+    # call the function specified, with the arguments supplied
     args.func(args)

@@ -50,7 +50,8 @@ Bug_Tracker = "https://github.com/scotthosking/amundsen-sea-low-index/issues"
 
 [dependency-groups]
 test = [
-    "pytest"
+    "pytest",
+    "pytest-cov",
 ]
 docs = [
     "jupyter-book"
