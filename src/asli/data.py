@@ -1,20 +1,15 @@
 """Download and organise data for ASLI calculations"""
 
-import argparse
-from datetime import datetime
 import logging
 from pathlib import Path
 
 import cdsapi
 
-from .params import ASL_REGION
+from .params import ASL_REGION, DEFAULT_START_YEAR, DEFAULT_END_YEAR
 
 logger = logging.getLogger(__name__)
 
 __all__ = ["CDSDownloader", "get_era5_monthly", "get_land_sea_mask"]
-
-DEFAULT_START_YEAR = 1953
-DEFAULT_END_YEAR = datetime.now().year
 
 
 class CDSDownloader:
@@ -80,7 +75,7 @@ def get_era5_monthly(
 
     request_params = {
         "format": "netcdf",
-        # "product_type": "monthly_averaged_reanalysis",
+        "product_type": "monthly_averaged_reanalysis",
         "variable": variables,
         "year": list(map(str, list(range(start_year, end_year + 1, 1)))),
         "month": [
@@ -116,69 +111,6 @@ def get_era5_monthly(
         area=_get_request_area(area, border),
     )
     data_downloader.download()
-
-
-def _cli_get_era5_monthly():
-    """
-    CLI for get_era5_monthly, designed to be used via package entrypoint
-    """
-    parser = argparse.ArgumentParser(
-        prog="asli_data_era5",
-        description="Downloads the ERA5 monthly averaged data from the Climate Data Store (CDS). \
-                                Uses the CDS API and therefore requires CDS account and API key. \
-                                Please see the CDS API documentation: https://cds.climate.copernicus.eu/api-how-to \
-                                If running for the first time, may require agreement to CDS T&Cs per dataset. See output for details. \
-                                \n \
-                                Downloads may queue for a considerable time depending on the CDS. \
-                                Request progress can be tracked through your CDS account at: https://cds.climate.copernicus.eu/cdsapp#!/yourrequests",
-    )
-    parser = _cli_data_common_args(parser)
-    parser.add_argument(
-        "-v",
-        "--vars",
-        nargs="?",
-        default="msl,",
-        help="comma-separated list of strings specifying variables to download. Can be one or more of 'msl' (default), 'tas', 'uas', \
-                        'vas' corresponding to 'mean_sea_level_pressure', '2m_temperature', '10m_u_component_of_wind', and '10m_v_component_of_wind', respectively.",
-    )
-    parser.add_argument(
-        "-s",
-        "--start",
-        default=DEFAULT_START_YEAR,
-        type=int,
-        help=f"Earliest year to download. (Default: {DEFAULT_START_YEAR})",
-    )
-    parser.add_argument(
-        "-n",
-        "--end",
-        default=DEFAULT_END_YEAR,
-        type=int,
-        help=f"Latest year to download. (Default: {DEFAULT_END_YEAR})",
-    )
-
-    args = parser.parse_args()
-
-    if args.e is True:
-        logger.info("'-e' flag specified. Will download whole Earth.")
-        area_dict = None
-    else:
-        area_dict = {
-            "north": args.area[0],
-            "west": args.area[1],
-            "south": args.area[2],
-            "east": args.area[3],
-        }
-
-    vars = list(filter(None, args.vars.split(",")))
-    logger.info(f"variables to download: {', '.join(vars)}")
-
-    get_era5_monthly(
-        data_dir=Path(args.datadir),
-        vars=vars,
-        start_year=args.start,
-        end_year=args.end,
-        area=area_dict,
-    )
 
 
 def get_land_sea_mask(
@@ -240,93 +172,3 @@ def _get_request_area(area: dict, border: float) -> dict:
         return request_area
     else:
         return None
-
-
-def _cli_get_land_sea_mask():
-    """
-    CLI for get_land_sea_mask, designed to be used via package entrypoint
-    """
-
-    args = _get_cli_lsm_args()
-    get_land_sea_mask(
-        data_dir=Path(args.datadir),
-        filename=args.filename,
-        area=args.area_dict,
-        border=args.border,
-    )
-
-
-def _get_cli_lsm_args():
-    parser = argparse.ArgumentParser(
-        prog="asli_data_lsm",
-        description="Downloads the ERA5 land-sea mask from the Climate Data Store (CDS). \
-                                Uses the CDS API and therefore requires CDS account and API key. \
-                                Please see the CDS API documentation: https://cds.climate.copernicus.eu/api-how-to \
-                                If running for the first time, may require agreement to CDS T&Cs per dataset. See output for details. \
-                                \n \
-                                Downloads may queue for a considerable time depending on the CDS. \
-                                Request progress can be tracked through your CDS account at: https://cds.climate.copernicus.eu/cdsapp#!/yourrequests",
-    )
-    parser = _cli_data_common_args(parser)
-    parser.add_argument(
-        "-f",
-        "--filename",
-        default="era5_lsm.nc",
-        help="Filename for data once downloaded. (Default: era5_lsm.nc)",
-    )
-
-    args = parser.parse_args()
-
-    if args.e is True:
-        logger.info("'-e' flag specified. Will download whole Earth.")
-        args.area_dict = None
-        args.border = None
-    else:
-        args.area_dict = {
-            "north": args.area[0],
-            "west": args.area[1],
-            "south": args.area[2],
-            "east": args.area[3],
-        }
-
-    return args
-
-
-def _cli_data_common_args(parser: argparse.ArgumentParser) -> argparse.ArgumentParser:
-    """Adds options that are common to the data download CLIs"""
-
-    parser.add_argument(
-        "-d",
-        "--datadir",
-        default="./data",
-        help="Path to directory in which to put downloaded data. (Default: ./data)",
-    )
-    parser.add_argument(
-        "-e",
-        action="store_true",
-        help="Download entire earth. i.e. don't restrict to bounds specified using '-a'.",
-    )
-    parser.add_argument(
-        "-a",
-        "--area",
-        type=float,
-        nargs=4,
-        default=[
-            ASL_REGION["north"],
-            ASL_REGION["west"],
-            ASL_REGION["south"],
-            ASL_REGION["east"],
-        ],
-        help=f"Bounding coordinates for data download: N W S E. Optional. Overridden by '-e' option. \
-                            (Default: bounds of Amundsen Sea: North: {ASL_REGION['north']}, West: {ASL_REGION['west']}, South: {ASL_REGION['south']}, East: {ASL_REGION['east']})",
-    )
-    parser.add_argument(
-        "-b",
-        "--border",
-        type=float,
-        nargs="?",
-        default=0.0,
-        help="Additional border around <area> to download in degrees",
-    )
-
-    return parser

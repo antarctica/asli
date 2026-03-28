@@ -9,12 +9,7 @@ import ecmwf.datastores.legacy_client
 import pytest
 
 from asli import ASL_REGION
-from asli.data import (
-    get_era5_monthly,
-    get_land_sea_mask,
-    _get_request_area,
-    _get_cli_lsm_args,
-)
+from asli.data import get_era5_monthly, get_land_sea_mask, _get_request_area
 
 
 @pytest.mark.parametrize(
@@ -122,6 +117,7 @@ class TestCDSDownloader(unittest.TestCase):
 
         request_params = {
             "format": "netcdf",
+            "product_type": "monthly_averaged_reanalysis",
             "variable": ["mean_sea_level_pressure"],
             "year": list(map(str, list(range(start_year, end_year + 1, 1)))),
             "month": [
@@ -171,29 +167,3 @@ class TestCDSDownloader(unittest.TestCase):
         mock_method.assert_called_with(
             "reanalysis-era5-single-levels-monthly-means", request_params, output_path
         )
-
-
-def test_get_cli_lsm_args():
-    # test -e flag
-    with patch("sys.argv", ["_", "-e"]):
-        args = _get_cli_lsm_args()
-
-        assert args.e is True
-        assert args.area_dict is None
-
-    # test area and border parsing
-    test_border = 7.0
-    with patch(
-        "sys.argv", ["_", "--area", "1", "2", "3", "4", "--border", str(test_border)]
-    ):
-        args = _get_cli_lsm_args()
-
-        assert args.area_dict == {"north": 1, "west": 2, "south": 3, "east": 4}
-        assert args.border == test_border
-
-    # test that -e overrides --area
-    with patch("sys.argv", ["_", "--area", "1", "2", "3", "4", "-e"]):
-        args = _get_cli_lsm_args()
-
-        assert args.e is True
-        assert args.area_dict is None

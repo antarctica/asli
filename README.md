@@ -4,9 +4,9 @@
 ![Python Version from PEP 621 TOML](https://img.shields.io/python/required-version-toml?tomlFilePath=https%3A%2F%2Fraw.githubusercontent.com%2Fdavidwyld%2Famundsen-sea-low-index%2Fpackaging%2Fpyproject.toml)
 ![tests](https://github.com/davidwyld/amundsen-sea-low-index/actions/workflows/tests.yml/badge.svg)
 
-![ASL image](asl.jpg) 
+![ASL image](asl.jpg)
 
-The Amundsen Seas Low (ASL) is a highly dynamic and mobile climatological low pressure system located in the Pacific sector of the Southern Ocean. In this sector, variability in sea-level pressure is greater than anywhere in the Southern Hemisphere, making it challenging to isolate local fluctuations in the ASL from larger-scale shifts in atmospheric pressure. The position and strength of the ASL are crucial for understanding regional change over West Antarctica. 
+The Amundsen Seas Low (ASL) is a highly dynamic and mobile climatological low pressure system located in the Pacific sector of the Southern Ocean. In this sector, variability in sea-level pressure is greater than anywhere in the Southern Hemisphere, making it challenging to isolate local fluctuations in the ASL from larger-scale shifts in atmospheric pressure. The position and strength of the ASL are crucial for understanding regional change over West Antarctica.
 
 This repository contains a python package (`asli`) which implements the ASL calculation methods described in [Hosking *et al.* (2016)](http://dx.doi.org/10.1002/2015GL067143), as well as notebooks illustrating its usage.
 
@@ -14,7 +14,7 @@ More information can be found [here](https://scotthosking.com/asl_index)
 
 If using the `asli` package please cite both this repository (see "Cite this repository" at the top right on GitHub), as well as the original paper, e.g.
 
-> Hosking, J. S., A. Orr, T. J. Bracegirdle, and J. Turner (2016), Future circulation changes off West Antarctica: Sensitivity of the Amundsen Sea Low to projected anthropogenic forcing, Geophys. Res. Lett., 43, 367–376, doi:10.1002/2015GL067143. 
+> Hosking, J. S., A. Orr, T. J. Bracegirdle, and J. Turner (2016), Future circulation changes off West Antarctica: Sensitivity of the Amundsen Sea Low to projected anthropogenic forcing, Geophys. Res. Lett., 43, 367–376, doi:10.1002/2015GL067143.
 
 > Hosking, J. S., & Wyld, D. asli [Computer software]. https://github.com/scotthosking/amundsen-sea-low-index
 
@@ -37,13 +37,13 @@ Install the package from GitHub using pip: `pip install git+https://github.com/s
 ### Downloading data
 Command-line utilities are provided as a convenient way to download the datasets required for this analysis.
 
-+ `asli_data_lsm` downloads land-sea mask ERA5 data.
-+ `asli_data_era5` downloads certain variables from ERA5, by default `mean_sea_level_pressure`.
++ `asli download --lsm` downloads land-sea mask ERA5 data.
++ `asli download` downloads certain variables from ERA5, by default `mean_sea_level_pressure`.
 
 The `--help` flags can be used to find out more information, e.g.
 
 ```sh
-asli_data_lsm --help
+asli download --help
 ```
 
 Alternatively, using the python interface:
@@ -62,14 +62,14 @@ help(get_era5_monthly)
 A command-line utility is also provided for performing the basic calculations, with a similar help flag:
 
 ```sh
-asli_calc --help
+asli calc --help
 ```
 
 Alternatively, using the python interface, import the package and create an instance of the `ASLICalculator` class, initialising with the locations of the land-sea mask and mean sea level pressure data:
 
 ```py
 import asli
-a = asli.ASLICalculator(data_dir="./data/", 
+a = asli.ASLICalculator(data_dir="./data/",
                    mask_filename="era5_lsm.nc",
                    msl_pattern="ERA5/monthly/era5_mean_sea_level_pressure_monthly_1988.nc"
                    )
@@ -95,7 +95,7 @@ Additionally you will need to provide the location of your s3 config file, to th
 ```py
 from pathlib import Path
 
-a = asli.ASLICalculator(data_dir="s3://asli", 
+a = asli.ASLICalculator(data_dir="s3://asli",
                    mask_filename="zarr-lsm",
                    msl_pattern="zarr-msl",
                    s3_config_dir = Path.home(), # Default location
@@ -103,7 +103,7 @@ a = asli.ASLICalculator(data_dir="s3://asli",
                    )
 ```
 
-Below is an example of an s3 config file, `~/.s3cfg`. This example is adapted from the [JASMIN documentation on using object storage](https://help.jasmin.ac.uk/docs/short-term-project-storage/using-the-jasmin-object-store/#using-s3cmd). Other object store providers can be used, but the config at a minimum should contain the `[default]` header and provide `access key`, `host_base`, `host_bucket` and `secret_key`. 
+Below is an example of an s3 config file, `~/.s3cfg`. This example is adapted from the [JASMIN documentation on using object storage](https://help.jasmin.ac.uk/docs/short-term-project-storage/using-the-jasmin-object-store/#using-s3cmd). Other object store providers can be used, but the config at a minimum should contain the `[default]` header and provide `access key`, `host_base`, `host_bucket` and `secret_key`.
 
 ```txt
 [default]
@@ -132,7 +132,7 @@ Optionally, calculations already saved to file can be read back in to a new `ASL
 
 ```
 import asli
-b = asli.ASLICalculator(data_dir="./data/", 
+b = asli.ASLICalculator(data_dir="./data/",
                    mask_filename="era5_lsm.nc",
                    msl_pattern="ERA5/monthly/era5_mean_sea_level_pressure_monthly_1988.nc"
                    )
