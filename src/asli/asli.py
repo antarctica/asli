@@ -2,7 +2,6 @@
 
 import datetime
 import logging
-import os
 from pathlib import Path
 from typing import Mapping, Union
 import warnings
@@ -216,13 +215,11 @@ class ASLICalculator:
 
     def __init__(
         self,
-        data_dir: str = "./data",
         mask_filename: str = "era5_lsm.nc",
-        msl_pattern: str = "monthly/era5_mean_sea_level_pressure_monthly_*.nc",
+        msl_pattern: str = "./data/era5/monthly/era5_mean_sea_level_pressure_monthly_*.nc",
         s3_config_dir: str = Path.home(),
         s3_config_filename: str = ".s3cfg",
     ) -> None:
-        self.data_dir = data_dir
         self.mask_filename = mask_filename
         self.msl_pattern = msl_pattern
 
@@ -238,17 +235,17 @@ class ASLICalculator:
 
     def read_mask_data(self):
         """
-        Reads in the Land-Sea mask file from <data_dir>/<mask_filename>
+        Reads in the Land-Sea mask file from <mask_filename>
         """
         # Check is the path is an s3 bucket
-        if self.data_dir.startswith("s3://"):
+        if self.mask_filename.startswith("s3://"):
             # Using utility function to set up s3 connection with the config file
             # Passing s3 connection and specifying file bucket
             import s3fs  # noqa
             # import zarr #noqa
 
             s3_lsm_bucket = s3fs.S3Map(
-                os.path.join(self.data_dir, self.mask_filename),
+                self.mask_filename,
                 s3=configure_s3_bucket(self.s3_config_dir, self.s3_config_filename),
             )
 
@@ -257,14 +254,12 @@ class ASLICalculator:
                 s3_lsm_bucket, consolidated=True
             ).lsm.squeeze()
         else:
-            self.land_sea_mask = xr.open_dataset(
-                Path(self.data_dir, self.mask_filename)
-            ).lsm.squeeze()
+            self.land_sea_mask = xr.open_dataset(self.mask_filename).lsm.squeeze()
 
     def read_msl_data(self, include_era5t: bool = False):
         """
-        Reads in the MSL (mean sea level pressure) files from <data_dir>/<msl_pattern>.
-        msl_pattern should be a file path under <data_dir> or a pattern (also within <data_dir>) as taken by xarray.open_mfdataset()
+        Reads in the MSL (mean sea level pressure) files from <msl_pattern>.
+        msl_pattern should be a file path a pattern as taken by xarray.open_mfdataset()
         eg monthly/era5_mean_sea_level_pressure_monthly_*.nc
 
         Args:
@@ -275,20 +270,19 @@ class ASLICalculator:
             logger.error("Must read in land-sea mask before mean sea level data.")
             return
 
-        if self.data_dir.startswith("s3://"):
+        if self.msl_pattern.startswith("s3://"):
             import s3fs  # noqa
             # import zarr #noqa
 
             s3_msl_bucket = s3fs.S3Map(
-                os.path.join(self.data_dir, self.msl_pattern),
+                self.msl_pattern,
                 s3=configure_s3_bucket(self.s3_config_dir, self.s3_config_filename),
             )
 
             # Using open_zarr to read in files, ie. we are expecting .zarr NOT .nc
             self.raw_msl_data = xr.open_zarr(s3_msl_bucket, consolidated=True).msl
         else:
-            raw_msl_data_path = os.path.join(self.data_dir, self.msl_pattern)
-            self.raw_msl_data = xr.open_mfdataset(raw_msl_data_path).msl
+            self.raw_msl_data = xr.open_mfdataset(self.msl_pattern).msl
 
         # expver coordinate indicates whether data is initial or final release
         # expver=0001 - final, expver=0005 initial
@@ -362,14 +356,12 @@ class ASLICalculator:
         self.asl_df = define_minima_per_time_in_region(self.all_lows_dfs)
         return self.asl_df
 
-    def to_csv(self, filename: str) -> None:
+    def to_csv(self, filepath: str) -> None:
         """Writes out ASLICalculator.asl_df as a CSV file with header.
 
         Args:
-            filename (str): filename to write out to, relative to "data_dir".
+            filepath (str): filepath to write out to.
         """
-
-        filepath = Path(self.data_dir, filename)
 
         # TODO handle source data, time_averaging and writing out all lows
         # if (len(self.all_lows_dfs.time.unique()) < 200):
@@ -401,13 +393,13 @@ class ASLICalculator:
             self.asl_df.to_csv(f, index=False, header=None)
 
     def import_from_csv(
-        self, filename: Union[str, Path], header: int = 33, force: bool = False
+        self, filepath: Union[str, Path], header: int = 33, force: bool = False
     ):
         """
         Import a csv file exported from the .export_df method, for example to plot data from a previous session.
 
         Args:
-            filename (str|Path, required): Path to csv file containing ASL dataframe.
+            filepath (str|Path, required): Path to csv file containing ASL dataframe.
             header (int, optional): number of header rows in csv. Default: 28
             force (bool, optional): Overwrite existing calculations in this object. Defaults to False.
         """
@@ -417,16 +409,14 @@ class ASLICalculator:
             )
             return
 
-        filepath = os.path.join(self.data_dir, filename)
-
         logger.info(f"Importing ASL values from {filepath}")
 
         # If we are reading from s3 we will need to call our configuration file
-        if self.data_dir.startswith("s3://"):
+        if str(filepath).startswith("s3://"):
             s3 = configure_s3_bucket(self.s3_config_dir, self.s3_config_filename)
 
             self.asl_df = pd.read_csv(
-                s3.open("{}/{}".format(self.data_dir, filename), mode="rb"),
+                s3.open(filepath, mode="rb"),
                 header=header,
             )
         else:

@@ -1,6 +1,5 @@
 import argparse
 import logging
-import os
 from pathlib import Path
 
 import matplotlib.pyplot as plt
@@ -15,32 +14,24 @@ logger = logging.getLogger(__name__)
 def _cli_common_args(parser: argparse.ArgumentParser) -> argparse.ArgumentParser:
     """Parse command-line args common to calculation and plotting."""
     parser.add_argument(
-        "-d",
-        "--datadir",
-        nargs="?",
-        type=str,
-        default="./data",
-        help="Path to directory in which to put downloaded data. (Default: ./data)",
-    )
-    parser.add_argument(
         "-m",
         "--mask",
         nargs="?",
         type=str,
         default="era5_lsm.nc",
-        help="Land-sea mask file path relative to <datadir>. (Default: era5_lsm.nc)",
+        help="Land-sea mask file path. (Default: ./data/era5_lsm.nc)",
     )
     parser.add_argument(
         "-o",
         "--output",
         type=str,
-        help="Output file path for file, relative to <datadir>.",
+        help="Output file path for file.",
     )
     parser.add_argument(
         "msl_files",
         nargs="*",
         type=str,
-        help="Path or glob pattern relative to <datadir> for file(s) containing mean sea level pressure.",
+        help="Path or glob pattern for file(s) containing mean sea level pressure.",
     )  # msl files/pattern
 
     return parser
@@ -49,7 +40,7 @@ def _cli_common_args(parser: argparse.ArgumentParser) -> argparse.ArgumentParser
 def _cli_plot(args):
     """Command-line interface to ASLI plotting."""
 
-    a = ASLICalculator(args.datadir, args.mask, args.msl_files[0])
+    a = ASLICalculator(args.mask, args.msl_files[0])
     a.read_mask_data()
     a.read_msl_data()
     # Perform the calculation if no input file is provided
@@ -63,13 +54,13 @@ def _cli_plot(args):
     else:
         a.plot_region_all()
     if args.output:
-        plt.savefig(os.path.join(args.datadir, args.output))
+        plt.savefig(args.output)
 
 
 def _cli_calc(args):
     """Command-line interface to ASL calculation."""
 
-    a = ASLICalculator(args.datadir, args.mask, args.msl_files[0])
+    a = ASLICalculator(args.mask, args.msl_files[0])
     a.read_mask_data()
     a.read_msl_data(include_era5t=args.era5t)
     a.calculate(args.numjobs, num_minima=args.minima)
@@ -262,7 +253,7 @@ def _top_level_parser() -> argparse.ArgumentParser:
         "--input",
         nargs="?",
         type=str,
-        help="Input CSV file, relative to <datadir>.",
+        help="Path to input CSV file.",
     )
     plot_parser.add_argument(
         "-y",
