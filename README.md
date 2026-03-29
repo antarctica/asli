@@ -18,6 +18,37 @@ More information can be found at <https://scotthosking.com/asl_index>
 
 Documentation for the `asli` package can be found at <https://scotthosking.com/amundsen-sea-low-index>
 
+## Installation and Basic Usage
+
+Install with pip from PyPI (we recommend using a virtual environment):
+
+```sh
+pip install asli
+```
+
+The following covers the most basic usage of the package, for full details see [the documentation](https://scotthosking.com/amundsen-sea-low-index).
+
+Download mean sea level pressure data from the Climate Data Store (CDS) using the command-line interface:
+
+```sh
+asli download
+```
+
+**Note** that use of CDS requires registration, set up an API key as per the CDS how to: <https://cds.climate.copernicus.eu/how-to-api>
+
+Download a land-sea mask:
+
+```sh
+asli download --lsm
+```
+
+Calculate the monthly pressure minima:
+
+```sh
+asli calc --output asli.csv
+```
+
+
 ## Citation
 
 If using the `asli` package please cite both this repository (see "Cite this repository" at the top right on GitHub), as well as the original paper, e.g.
