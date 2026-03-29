@@ -4,7 +4,13 @@
 
 We advise installing this package and its dependencies in a python virtual environment using a tool such as [venv](https://docs.python.org/3/library/venv.html) or [conda](https://conda.io/projects/conda/en/latest/user-guide/getting-started.html#managing-python) (other virtual environment managers are available).
 
-Install the package from GitHub using pip:
+Install the latest version of the package from PyPI using pip:
+
+```sh
+pip install asli
+```
+
+or from GitHub:
 
 ```sh
 pip install git+https://github.com/scotthosking/amundsen-sea-low-index
@@ -24,47 +30,51 @@ Whilst the default behaviour is to download and run the calculations for the bou
 
 ## Command-line interface
 
-### Downloading data `asli_data_lsm` and `asli_data_era5`
+Below we show the basic usage of the command-line interface (CLI), for more in-depth information run `asli --help` or the [CLI reference](cli.md).
+
+### Downloading data `asli download`
 Command-line utilities are provided as a convenient way to download the datasets required for this analysis.
 
-+ `asli_data_lsm` downloads land-sea mask ERA5 data.
-+ `asli_data_era5` downloads certain variables from ERA5, by default `mean_sea_level_pressure`.
++ `asli download` downloads certain variables from ERA5, by default `mean_sea_level_pressure`.
++ `asli download --lsm` downloads land-sea mask ERA5 data.
 
 The `--help` flags can be used to find out more information, e.g.
 
 ```sh
-asli_data_lsm --help
+asli download --help
 ```
 
-### Running calculations `asli_calc`
-A command-line utility is also provided for performing the basic calculations, with a similar help flag:
+To download the land-sea mask for the Amundsen Sea region to the directory `./data`, run:
 
 ```sh
-asli_calc --help
+asli download --lsm
 ```
 
-### Plotting `asli_plot`
+To download the ERA5 mean sea level pressure data from 1959 (the start of ERA5) to the current year, also to the directory `./data`, run:
 
 ```sh
-asli_plot --help
-
-usage: asli_plot [-h] [-i [INPUT]] [-y [YEAR]] [-d [DATADIR]] [-m [MASK]] [-o OUTPUT] [msl_files ...]
-
-Plot Amundsen sea low with mean sea level pressure fields.
-
-positional arguments:
-  msl_files             Path or glob pattern relative to <datadir> for file(s) containing mean sea level
-                        pressure.
-
-options:
-  -h, --help            show this help message and exit
-  -i, --input [INPUT]   Input CSV file, relative to <datadir>.
-  -y, --year [YEAR]     When present, plot only the year specified
-  -d, --datadir [DATADIR]
-                        Path to directory in which to put downloaded data. (Default: ./data)
-  -m, --mask [MASK]     Land-sea mask file path relative to <datadir>. (Default: era5_lsm.nc)
-  -o, --output OUTPUT   Output file path for file, relative to <datadir>.
+asli download
 ```
+
+Much of the download behaviour can be customised using flags for the temporal and spatial range as well as to download other variables from the ERA5 monthly averaged dataset. For more in-depth information run `asli --help` or the [CLI reference](cli.md).
+
+
+### Running calculations `asli calc`
+To run the calculations of the locations of each montlhy pressure minimum, using the default options, run:
+
+```sh
+asli calc era5/monthly/era5_mean_sea_level_pressure_monthly_1959-2026.nc
+```
+
+Additional options at the command line can control:
+
++ the number of cores used for the parallel computation of the pressure minima,
++ whether or not to include ERA5T non-finalised ERA5 data for recent months,
++ the location of the output file.
+
+### Plotting `asli plot`
+
+
 
 ## Python interface
 Alternatively, using the python interface:

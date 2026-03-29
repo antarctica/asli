@@ -1,4 +1,4 @@
-# Amundsen Sea Low Index (ASLI)
+# ASLI (Amundsen Sea Low Index)
 
 ![GitHub License](https://img.shields.io/github/license/davidwyld/amundsen-sea-low-index)
 ![Python Version from PEP 621 TOML](https://img.shields.io/python/required-version-toml?tomlFilePath=https%3A%2F%2Fraw.githubusercontent.com%2Fdavidwyld%2Famundsen-sea-low-index%2Fpackaging%2Fpyproject.toml)
@@ -10,7 +10,9 @@
 
 The Amundsen Sea Low (ASL) is a highly dynamic and mobile climatological low pressure system located in the Pacific sector of the Southern Ocean. In this sector, variability in sea-level pressure is greater than anywhere in the Southern Hemisphere, making it challenging to isolate local fluctuations in the ASL from larger-scale shifts in atmospheric pressure. The position and strength of the ASL are crucial for understanding regional change over West Antarctica.
 
-This repository contains a python package (`asli`) which implements the ASL calculation methods described in [Hosking *et al.* (2016)](http://dx.doi.org/10.1002/2015GL067143). If you're looking for the regularly updated dataset, it will soon be published with the Polar Data Centre. Whilst the default behaviour is bounded to the Amundsen Sea area, the package will extract the pressure minima from ERA5 data over time for any rectangular geographic area.
+This is a python package (`asli`) which implements the ASL calculation methods described in [Hosking *et al.* (2016)](http://dx.doi.org/10.1002/2015GL067143) to identify, plot and publish sea level pressure minima. Whilst the default behaviour is bounded to the Amundsen Sea area, the package will extract the pressure minima from ERA5 data over time for any rectangular geographic area of the sea.
+
+If you're looking for the regularly updated ASLI dataset, it will soon be published with the Polar Data Centre.
 
 More information can be found at <https://scotthosking.com/asl_index>
 
@@ -31,141 +33,3 @@ The ASL calculation is derived from ERA5 data downloaded from the Copernicus Cli
 > Hersbach, H., Bell, B., Berrisford, P., Biavati, G., Horányi, A., Muñoz Sabater, J., Nicolas, J., Peubey, C., Radu, R., Rozum, I., Schepers, D., Simmons, A., Soci, C., Dee, D., Thépaut, J-N. (2018): ERA5 hourly data on single levels from 1940 to present. Copernicus Climate Change Service (C3S) Climate Data Store (CDS), DOI: 10.24381/cds.adbb2d47 , (Accessed on DD-MMM-YYYY)
 
 See the [ECMWF wiki for further information on citing ERA5](https://confluence.ecmwf.int/display/CKB/Use+Case+2%3A+ERA5+hourly+data+on+single+levels+from+1940+to+present).
-<<<<<<< HEAD
-
-## Usage
-
-### Installation
-
-We advise installing this package and its dependencies in a python virtual environment using a tool such as [venv](https://docs.python.org/3/library/venv.html) or [conda](https://conda.io/projects/conda/en/latest/user-guide/getting-started.html#managing-python) (other virtual environment managers are available).
-
-Install the package from GitHub using pip: `pip install git+https://github.com/scotthosking/amundsen-sea-low-index`
-
-### Downloading data
-Command-line utilities are provided as a convenient way to download the datasets required for this analysis.
-
-+ `asli download --lsm` downloads land-sea mask ERA5 data.
-+ `asli download` downloads certain variables from ERA5, by default `mean_sea_level_pressure`.
-
-The `--help` flags can be used to find out more information, e.g.
-
-```sh
-asli download --help
-```
-
-Alternatively, using the python interface:
-
-```py
-from asli.data import get_land_sea_mask, get_era5_monthly
-
-help(get_land_sea_mask)
-...
-
-help(get_era5_monthly)
-...
-```
-
-### Running calculations
-A command-line utility is also provided for performing the basic calculations, with a similar help flag:
-
-```sh
-asli calc --help
-```
-
-Alternatively, using the python interface, import the package and create an instance of the `ASLICalculator` class, initialising with the locations of the land-sea mask and mean sea level pressure data:
-
-```py
-import asli
-a = asli.ASLICalculator(data_dir="./data/",
-                   mask_filename="era5_lsm.nc",
-                   msl_pattern="ERA5/monthly/era5_mean_sea_level_pressure_monthly_1988.nc"
-                   )
-```
-
-then read in the data and perform the calculation:
-
-```py
-a.read_mask_data()
-a.read_msl_data()
-a.calculate()
-```
-
-#### Working with Zarr and Object Storage
-The `asli` package also supports Zarr data import from s3 storage through the python interface. The method remains the same, but you will need to install the [s3] optional dependencies.
-
-```sh
-pip install git+https://github.com/scotthosking/amundsen-sea-low-index[s3]
-```
-
-Additionally you will need to provide the location of your s3 config file, to the `ASLICalculator` class:
-
-```py
-from pathlib import Path
-
-a = asli.ASLICalculator(data_dir="s3://asli",
-                   mask_filename="zarr-lsm",
-                   msl_pattern="zarr-msl",
-                   s3_config_dir = Path.home(), # Default location
-                   s3_config_filename = ".s3cfg" # Default location
-                   )
-```
-
-Below is an example of an s3 config file, `~/.s3cfg`. This example is adapted from the [JASMIN documentation on using object storage](https://help.jasmin.ac.uk/docs/short-term-project-storage/using-the-jasmin-object-store/#using-s3cmd). Other object store providers can be used, but the config at a minimum should contain the `[default]` header and provide `access key`, `host_base`, `host_bucket` and `secret_key`.
-
-```txt
-[default]
-access_key = <access key>
-host_base = my-os-tenancy-o.s3-ext.jc.rl.ac.uk
-host_bucket = my-os-tenancy-o.s3-ext.jc.rl.ac.uk
-secret_key = <secret key>
-use_https = True
-signature_v2 = False
-```
-
-### Outputting data as a csv file and plotting
-Once the calculations are done, we can write out the dataframe to a csv file, providing the filename:
-
-```py
-a.to_csv('asl.csv')
-```
-
-Basic plots of the pressure fields and lows can be made using the `plot_region_all()` and `plot_region_year()` methods.
-
-```py
-a.plot_region_all()
-```
-
-Optionally, calculations already saved to file can be read back in to a new `ASLCalculator` object with its `import_from_csv()` method, for instance in a new session, for plotting. Note that to plot from a new object, the `read_mask_data()` and `read_msl_data()` (or just `read_data()`) methods will need to be run first, for example:
-
-```
-import asli
-b = asli.ASLICalculator(data_dir="./data/",
-                   mask_filename="era5_lsm.nc",
-                   msl_pattern="ERA5/monthly/era5_mean_sea_level_pressure_monthly_1988.nc"
-                   )
-b.read_data()
-b.import_from_csv('asl.csv')
-b.plot_region_all()
-```
-
-### Getting help
-Most of the package has docstrings in the source code, so try running `help()` on any of the functions, classes or their methods, e.g. `help(asli.ASLICalculator)`.
-
-
-## Contributing
-We welcome contributions and improvements to this package!
-
-Please submit bug reports and feature requests as issues [on the GitHub repo](https://github.com/scotthosking/amundsen-sea-low-index/issues/new).
-
-### Development tips
-
-When making changes to the source code (including to the docs):
-
-1. Fork this repository on GitHub,
-1. Clone the package to your computer: `git clone https://github.com/<your-username>/amundsen-sea-low-index`
-1. Inside a virtual environment, install the package as an editable pip install: `pip install -e amundsen-sea-low-index` (where `amundsen-sea-low-index` is the relative path to the cloned repository),
-1. Also install the development dependency groups: `pip install --group test --group docs --group dev`
-1. Make your changes and run the tests using pytest: `pytest` and/or test the docs build using `jupyter-book build docs/`
-1. Commit and push your changes to GitHub and open a pull request.
-=======
->>>>>>> fd165ff (wip docs)
