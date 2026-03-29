@@ -16,4 +16,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 + `--datadir` option for `asli calc` and `asli plot` has been removed; with the corresponding arguments in the python interface to `ASLICalculator` being removed. Data paths are now specified as full paths in order to improve user experience in the command line interface via utilising normal tab completion.
 + `filename` argument is changed to `filepath` throughout, reflecting change from specifying files relative to `data_dir`.
 
+
+### Added
++ Log warning when no output file specified to `asli calc`.
+
 ## 0.1.0 - 2026-03-20

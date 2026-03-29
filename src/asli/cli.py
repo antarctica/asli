@@ -18,7 +18,7 @@ def _cli_common_args(parser: argparse.ArgumentParser) -> argparse.ArgumentParser
         "--mask",
         nargs="?",
         type=str,
-        default="era5_lsm.nc",
+        default="./data/era5_lsm.nc",
         help="Land-sea mask file path. (Default: ./data/era5_lsm.nc)",
     )
     parser.add_argument(
@@ -59,6 +59,9 @@ def _cli_plot(args):
 
 def _cli_calc(args):
     """Command-line interface to ASL calculation."""
+
+    if not args.output:
+        logger.warning("No output file specified. Running calculations without output.")
 
     a = ASLICalculator(args.mask, args.msl_files[0])
     a.read_mask_data()
