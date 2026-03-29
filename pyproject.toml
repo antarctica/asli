@@ -63,3 +63,18 @@ dev = [
 
 [project.scripts]
 asli = "asli:cli.cli"
+
+
+[tool.pytest.ini_options]
+testpaths = [
+    "tests"
+]
+
+[tool.coverage.run]
+branch = true
+source = [
+    "src/",
+]
+omit = [
+    "src/asli/templates/*",
+    ]
