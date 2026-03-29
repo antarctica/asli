@@ -144,11 +144,11 @@ def _top_level_parser() -> argparse.ArgumentParser:
         help="Download ERA5 or land-sea mask data from the Climate Data Store.",
         description="Downloads the ERA5 monthly averaged data or land-sea mask from the Climate Data Store (CDS). \
                     Uses the CDS API and therefore requires CDS account and API key. \
-                    Please see the CDS API documentation: https://cds.climate.copernicus.eu/api-how-to \
+                    Please see the CDS API documentation: https://cds.climate.copernicus.eu/how-to-api \
                     If running for the first time, may require agreement to CDS T&Cs per dataset. See output for details. \
                     \n \
                     Downloads may queue for a considerable time depending on the CDS. \
-                    Request progress can be tracked through your CDS account at: https://cds.climate.copernicus.eu/cdsapp#!/yourrequests",
+                    Request progress can be tracked through your CDS account at: https://cds.climate.copernicus.eu/requests",
     )
     download_parser.set_defaults(func=_cli_download)
     download_parser.add_argument(
