@@ -18,6 +18,8 @@ More information can be found at <https://scotthosking.com/asl_index>
 
 Documentation for the `asli` package can be found at <https://scotthosking.com/amundsen-sea-low-index>
 
+**Note on versioning:** For reproducible workflows, we suggest pinning the exact version of the package in your `requirements.txt`, `pyproject.toml` or similar since we can not guarantee non-breaking changes between versions.
+
 ## Installation and Basic Usage
 
 Install with pip from PyPI (we recommend using a virtual environment):
