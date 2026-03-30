@@ -418,16 +418,22 @@ class ASLICalculator:
 
         logger.info(f"Importing ASL values from {filepath}")
 
+        # common arguments for read_csv
+        csv_read_kwargs = {
+            "header": header,
+            "parse_dates": ["time (mo)"],
+        }
+
         # If we are reading from s3 we will need to call our configuration file
         if str(filepath).startswith("s3://"):
             s3 = configure_s3_bucket(self.s3_config_dir, self.s3_config_filename)
 
             self.asl_df = pd.read_csv(
                 s3.open(filepath, mode="rb"),
-                header=header,
+                **csv_read_kwargs,
             )
         else:
-            self.asl_df = pd.read_csv(filepath, header=header)
+            self.asl_df = pd.read_csv(filepath, **csv_read_kwargs)
 
         self.asl_df.rename(
             columns={
