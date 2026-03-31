@@ -2,11 +2,11 @@ import argparse
 import logging
 from pathlib import Path
 
-import matplotlib.pyplot as plt
 
 from .asli import ASLICalculator
 from .data import get_land_sea_mask, get_era5_monthly
 from .params import ASL_REGION, DEFAULT_START_YEAR, DEFAULT_END_YEAR
+from .plot import Plotter
 
 logger = logging.getLogger(__name__)
 
@@ -40,21 +40,35 @@ def _cli_common_args(parser: argparse.ArgumentParser) -> argparse.ArgumentParser
 def _cli_plot(args):
     """Command-line interface to ASLI plotting."""
 
+    # warn against missing input and output commands before anything else happens
+    if not args.input:
+        logger.warning("No input file specified. Calculating pressure minima.")
+
+    if not args.output:
+        logger.warning("No output file specified. Running plots without output.")
+
     a = ASLICalculator(args.mask, args.msl_files[0])
     a.read_mask_data()
     a.read_msl_data()
+
     # Perform the calculation if no input file is provided
     if args.input:
         a.import_from_csv(args.input)
     else:
         a.calculate()
+
     # Plot all if no specific year is provided
+    plotter = Plotter(a)
     if args.year:
-        a.plot_region_year(args.year)
+        fig, _ = plotter.plot_year(args.year, colorbar=True)
     else:
-        a.plot_region_all()
+        raise NotImplementedError(
+            "Full range plotter not implemented yet, try plotting for one year."
+        )
+
     if args.output:
-        plt.savefig(args.output)
+        logger.info(f"Saving plot to {args.output}")
+        fig.savefig(f"{args.output}")
 
 
 def _cli_calc(args):
@@ -279,3 +293,7 @@ def cli():
 
     # call the function specified, with the arguments supplied
     args.func(args)
+
+
+if __name__ == "__main__":
+    cli()
