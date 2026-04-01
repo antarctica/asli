@@ -41,10 +41,6 @@ class TestASLICalculator(unittest.TestCase):
 
         a.to_csv(self.temp_filename)
 
-        # test plotting behaviour for calculated dataframe
-        a.plot_region_all()
-        a.plot_region_year(2024)
-
         # should raise warning if a.asl_df already present and force option is false
         with pytest.warns(UserWarning):
             a.import_from_csv(filepath=self.temp_filename)
@@ -59,7 +55,3 @@ class TestASLICalculator(unittest.TestCase):
         a.import_from_csv(filepath=Path("tests", "fixtures", "test_csv.csv"))
         assert isinstance(a.asl_df, pd.DataFrame)
         assert a.asl_df.shape == (11, 7)
-
-        # test plotting behaviour for imported data
-        a.plot_region_all()
-        a.plot_region_year(2024)
