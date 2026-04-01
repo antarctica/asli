@@ -21,18 +21,28 @@ __all__ = ["ASLICalculator"]
 
 
 def asl_sector_mean(
-    da: xr.DataArray, mask: xr.DataArray, asl_region: Mapping[str, float] = ASL_REGION
+    da: xr.DataArray,
+    mask: xr.DataArray,
+    region: Mapping[str, float] = ASL_REGION,
 ) -> xr.DataArray:
     """
     Mean of data array `da`, masked by land-sea mask `mask` within bounded region `asl_region`.
-    `asl_region` defaults to Amundsen Sea bounds defined in this package as `ASL_REGION`.
+    `region` defaults to Amundsen Sea bounds defined in this package as `ASL_REGION`.
+
+    Args:
+        da (xr.DataArray): data array
+        mask (xr.DataArray): land-sea mask containing land-sea fractions between 0 & 1
+        region (dict[str, float]): rectangular region defined by dictionary of bounds with keys "west", "east", "north", "south"
+
+    Returns:
+        xr.DataArray: Mean, masked data array
     """
 
     return (
         da.where(mask < MASK_THRESHOLD)
         .sel(
-            latitude=slice(asl_region["north"], asl_region["south"]),
-            longitude=slice(asl_region["west"], asl_region["east"]),
+            latitude=slice(region["north"], region["south"]),
+            longitude=slice(region["west"], region["east"]),
         )
         .mean()
         .values
@@ -143,6 +153,19 @@ def get_lows(
 def _get_lows_by_time(
     da: xr.DataArray, slice_by: str, t: int, mask: xr.DataArray, minima: int
 ):
+    """
+    Runs get_lows on a data array sliced by valid_time or by season.
+
+    Args:
+        da (xr.DataArray): data array
+        slice_by (str): "season" or "valid_time"
+        t (int): index
+        mask (xr.DataArray): mask data array
+        minima (int): number of minima to find.
+
+    Returns:
+        pd.DataFrame: containing columns 'time','longitude','latitude','actual_central_pressure','sector_pressure','relative_central_pressure' returned by get_lows
+    """
     if slice_by == "season":
         da_t = da.isel(season=t)
     elif slice_by == "valid_time":
@@ -159,6 +182,14 @@ def define_minima_per_time_in_region(
     """
     From a dataframe of multiple minima per time period, selects the lowest minimum within each time period,
     contained within bounding box: region (defaults to ASL_REGION)
+
+    Args:
+        df (pd.DataFrame): dataframe of one or more minima per time period
+        region (dict[str, float]): rectangular region defined by dictionary of bounds with keys "west", "east", "north", "south"
+        output_all_minima  (bool): if false, only output the lowest minimum per time, if true, output all minima
+
+    Returns:
+        pd.DataFrame: The dataframe with defined number of minima per time period.
     """
     ### select only those points within ASL box
     df2 = df[
@@ -177,10 +208,20 @@ def define_minima_per_time_in_region(
 
 
 def slice_region(
-    da: xr.DataArray, region: Mapping[str, float] = ASL_REGION, border: int = 8
+    da: xr.DataArray,
+    region: Mapping[str, float] = ASL_REGION,
+    border: float = 8,
 ):
     """
     Select region from within data array, with surrounding border.
+
+    Args:
+        da (xr.DataArray): data array to select from
+        region (dict[str, float]): rectangular region defined by dictionary of bounds with keys "west", "east", "north", "south"
+        border (float): border to add around region, in same units as latitude and longitude in da
+
+    Returns:
+        da (xr.DataArray): subsetted data array
     """
     da = da.sel(
         latitude=slice(region["north"] + border, region["south"] - border),
@@ -189,22 +230,22 @@ def slice_region(
     return da
 
 
-def season_mean(ds, calendar="standard"):
-    # # Make a DataArray with the number of days in each month, size = len(time)
-    # month_length = ds.time.dt.days_in_month
+# def season_mean(ds, calendar="standard"):
+# # Make a DataArray with the number of days in each month, size = len(time)
+# month_length = ds.time.dt.days_in_month
 
-    # # Calculate the weights by grouping by 'time.season'
-    # weights = (
-    #     month_length.groupby("time.season") / month_length.groupby("time.season").sum()
-    # )
+# # Calculate the weights by grouping by 'time.season'
+# weights = (
+#     month_length.groupby("time.season") / month_length.groupby("time.season").sum()
+# )
 
-    # # Test that the sum of the weights for each season is 1.0
-    # np.testing.assert_allclose(weights.groupby("time.season").sum().values, np.ones(4))
+# # Test that the sum of the weights for each season is 1.0
+# np.testing.assert_allclose(weights.groupby("time.season").sum().values, np.ones(4))
 
-    # # Calculate the weighted average
-    # return (ds * weights).groupby("time.season").sum(dim="time")
+# # Calculate the weighted average
+# return (ds * weights).groupby("time.season").sum(dim="time")
 
-    return ds.resample(time="QS-Mar").mean("time")
+# return ds.resample(time="QS-Mar").mean("time")
 
 
 class ASLICalculator:
@@ -212,9 +253,8 @@ class ASLICalculator:
     Object to handle calculations of the Amundsen Sea Low Index
 
     Args:
-        data_dir(str): Path to root data directory.
         mask_filename(str): filename for land-sea mask.
-        msl_pattern(str): relative to data_dir, the filename or filename glob pattern for files containing mean sea level pressure data.
+        msl_pattern(str): the filename or filename glob pattern for files containing mean sea level pressure data. Should be a file path a pattern as taken by xarray.open_mfdataset()
         s3_config_dir(str): path to directory containing the s3 config, if used.
         s3_config_filename(str): filename for the s3 config, if used.
     """
@@ -241,7 +281,7 @@ class ASLICalculator:
 
     def read_mask_data(self):
         """
-        Reads in the Land-Sea mask file from <mask_filename>
+        Reads in the Land-Sea mask file from self.mask_filename and adds it to self.land_sea_mask
         """
         # Check is the path is an s3 bucket
         if self.mask_filename.startswith("s3://"):
@@ -264,7 +304,7 @@ class ASLICalculator:
 
     def read_msl_data(self, include_era5t: bool = False):
         """
-        Reads in the MSL (mean sea level pressure) files from <msl_pattern>.
+        Reads in the MSL (mean sea level pressure) files from self.msl_pattern.
         msl_pattern should be a file path a pattern as taken by xarray.open_mfdataset()
         eg monthly/era5_mean_sea_level_pressure_monthly_*.nc
 
@@ -406,7 +446,7 @@ class ASLICalculator:
 
         Args:
             filepath (str|Path, required): Path to csv file containing ASL dataframe.
-            header (int, optional): number of header rows in csv. Default: 28
+            header (int, optional): number of header rows in csv. Default: 33
             force (bool, optional): Overwrite existing calculations in this object. Defaults to False.
         """
         if self.asl_df is not None and not force:
