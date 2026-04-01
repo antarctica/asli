@@ -27,15 +27,16 @@ class Plotter:
     def draw_regional_box(
         ax: matplotlib.axes.Axes,
         region: dict,
-        transform: ccrs.Projection = ccrs.PlateCarree(),
     ):
         """
-        Draw box around a region on a map
+        Draw box around a region on a map.
 
         Args:
-            ax
+            ax (matplotlib.axes.Axes): axes object on which to plot box.
             region (dict): keys west,east,south,north containing numeric values of the extent in latitude and longitude.
         """
+
+        transform = ccrs.PlateCarree()
 
         ax.plot(
             [region["west"], region["west"]],
@@ -91,9 +92,9 @@ class Plotter:
         Core plotting function. Plot a single month of pressure fields and minima from self.da and self.df.
 
         Args:
-            year (int)
-            month (int)
-            ax
+            year (int): Year to plot from self.da
+            month (int): Month to plot from self.da
+            ax (matplotlib.axes.Axes, optional): axes object to use for plot, if not supplied, one will be created. Primarily used for multi-plot figures/subplots.
             cmap (str, optional): matplotlib-valid colormap string for contour plots. Defaults to "Reds".
             border (int, optional): border around each plot. Defaults to 10.
             regionbox (dict, optional): plot a black box around region. Defaults to asli.params.ASL_REGION.
@@ -101,13 +102,13 @@ class Plotter:
             point_color (str, optional): used when one point per month, colour of marker, must be matplotlib-valid color string. Defaults to "k".
             point_cmap (str, optional): used when multiple points per month. must be matplotlib-valid colormap. Defaults to "gray".
             coastline_resolution (str, optional): resolution for coastlines as taken by cartopy.mpl.geoaxes.GeoAxes.coastlines, default: "110m"
-            min (float, optional)
-            max
-            levels (int, optional)
+            min (float, optional): minimum value in colormap, if not provided, will be calculated. Primarily used for multi-plot figures.
+            max (float, optional): maximum value in colormap, if not provided, will be calculated. Primarily used for multi-plot figures.
+            levels (int, optional): Number of levels in contour plot.
 
         Returns:
-            fig
-            ax
+            fig (matplotlib.figure.Figure): figure object
+            ax (matplotib.axes.Axes): axis object
         """
         # If no axes provided, create a new standalone figure
         if ax is None:
@@ -193,15 +194,17 @@ class Plotter:
         return fig, ax
 
     def plot_da(self, da: xr.DataArray, n_cols: int = 3, *args, **kwargs):
-        """Plot a range of times from the DataArray
+        """Plot all the months in the given DataArray, da.
 
         Args:
             da (xr.DataArray): DataArray to plot.
             n_cols (int): number of columns in which to arrange the plots.
+            *args: positional arguments passed to plot_month
+            **kwargs: keyword arguments passed to plot_month
 
         Returns:
-            fig
-            ax
+            fig (matplotlib.figure.Figure): figure object
+            ax (matplotib.axes.Axes): axis object
         """
 
         # get the min and max values of the range to set consistent color scales
@@ -244,9 +247,30 @@ class Plotter:
         return fig, ax
 
     def plot_year(self, year: int, *args, **kwargs):
+        """Plot a single calendar year from the DataArray self.da.
+
+        Args:
+            year (int): The year to plot.
+            *args: positional arguments passed to plot_month
+            **kwargs: keyword arguments passed to plot_month
+
+        Returns:
+            fig (matplotlib.figure.Figure): figure object
+            ax (matplotib.axes.Axes): axis object
+        """
         da_year = self.da.sel(valid_time=slice(f"{year}-01-01", f"{year}-12-01"))
 
         return self.plot_da(da_year, *args, **kwargs)
 
     def plot_all(self, *args, **kwargs):
+        """Plot all months from the DataArray self.da.
+
+        Args:
+            *args: positional arguments passed to plot_month
+            **kwargs: keyword arguments passed to plot_month
+
+        Returns:
+            fig (matplotlib.figure.Figure): figure object
+            ax (matplotib.axes.Axes): axis object
+        """
         return self.plot_da(self.da, *args, **kwargs)
