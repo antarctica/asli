@@ -3,6 +3,7 @@
 import cartopy.crs as ccrs
 import pandas as pd
 import matplotlib
+import matplotlib.figure
 import numpy as np
 
 from .asli import ASLICalculator
