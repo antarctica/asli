@@ -2,11 +2,11 @@ import argparse
 import logging
 from pathlib import Path
 
-import matplotlib.pyplot as plt
 
 from .asli import ASLICalculator
 from .data import get_land_sea_mask, get_era5_monthly
 from .params import ASL_REGION, DEFAULT_START_YEAR, DEFAULT_END_YEAR
+from .plot import Plotter
 
 logger = logging.getLogger(__name__)
 
@@ -19,7 +19,7 @@ def _cli_common_args(parser: argparse.ArgumentParser) -> argparse.ArgumentParser
         nargs="?",
         type=str,
         default="./data/era5_lsm.nc",
-        help="Land-sea mask file path. (Default: ./data/era5_lsm.nc)",
+        help="Land-sea mask file path. Default: %(default)s",
     )
     parser.add_argument(
         "-o",
@@ -40,21 +40,43 @@ def _cli_common_args(parser: argparse.ArgumentParser) -> argparse.ArgumentParser
 def _cli_plot(args):
     """Command-line interface to ASLI plotting."""
 
+    # warn against missing input and output commands before anything else happens
+    if not args.input:
+        logger.warning("No input file specified. Calculating pressure minima.")
+
+    if not args.output:
+        logger.warning("No output file specified. Running plots without output.")
+
+    if args.month and not args.year:
+        logger.error(
+            f"--month option specified (value: {args.month}) but no value for -y/--year, if using month, year must be present also."
+        )
+
     a = ASLICalculator(args.mask, args.msl_files[0])
     a.read_mask_data()
     a.read_msl_data()
+
     # Perform the calculation if no input file is provided
     if args.input:
         a.import_from_csv(args.input)
     else:
         a.calculate()
+
     # Plot all if no specific year is provided
-    if args.year:
-        a.plot_region_year(args.year)
+    plotter = Plotter(a)
+    if args.month and args.year:
+        logger.info(f"Plotting for {args.year}-{args.month} from {args.msl_files}.")
+        fig, _ = plotter.plot_month(year=args.year, month=args.month, colorbar=True)
+    elif args.year:
+        logger.info(f"Plotting for {args.year} from {args.msl_files}.")
+        fig, _ = plotter.plot_year(args.year, colorbar=True)
     else:
-        a.plot_region_all()
+        logger.info(f"Plotting for full range from {args.msl_files}.")
+        fig, _ = plotter.plot_all(colorbar=True)
+
     if args.output:
-        plt.savefig(args.output)
+        logger.info(f"Saving plot to {args.output}")
+        fig.savefig(f"{args.output}")
 
 
 def _cli_calc(args):
@@ -131,6 +153,22 @@ def _parse_args(parser: argparse.ArgumentParser):
     return args
 
 
+def _validate_year(value):
+    """Checks if the year is a 4-digit integer."""
+    ivalue = int(value)
+    if not (1959 <= ivalue <= 3000):
+        raise argparse.ArgumentTypeError(f"{value} is not a valid year")
+    return ivalue
+
+
+def _validate_month(value):
+    """Checks if the month is between 1 and 12."""
+    ivalue = int(value)
+    if not (1 <= ivalue <= 12):
+        raise argparse.ArgumentTypeError(f"{value} is not a valid month (1-12)")
+    return ivalue
+
+
 def _top_level_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="asli",
@@ -155,7 +193,7 @@ def _top_level_parser() -> argparse.ArgumentParser:
         "-d",
         "--datadir",
         default="./data",
-        help="Path to directory in which to put downloaded data. (Default: ./data)",
+        help="Path to directory in which to put downloaded data. (Default: %(default)s)",
     )
     download_parser.add_argument(
         "-e",
@@ -173,8 +211,8 @@ def _top_level_parser() -> argparse.ArgumentParser:
             ASL_REGION["south"],
             ASL_REGION["east"],
         ],
-        help=f"Bounding coordinates for data download: N W S E. Optional. Overridden by '-e' option. \
-                            (Default: bounds of Amundsen Sea: North: {ASL_REGION['north']}, West: {ASL_REGION['west']}, South: {ASL_REGION['south']}, East: {ASL_REGION['east']})",
+        help="Bounding coordinates for data download: N W S E. Optional. Overridden by '-e' option. \
+                            (Default: bounds of Amundsen Sea: %(default)s)",
     )
     download_parser.add_argument(
         "-b",
@@ -182,7 +220,7 @@ def _top_level_parser() -> argparse.ArgumentParser:
         type=float,
         nargs="?",
         default=0.0,
-        help="Additional border around <area> to download in degrees",
+        help="Additional border around <area> to download in degrees. Default: %(default)s",
     )
     download_parser.add_argument(
         "--lsm",
@@ -195,21 +233,22 @@ def _top_level_parser() -> argparse.ArgumentParser:
         nargs="?",
         default="msl,",
         help="comma-separated list of strings specifying variables to download. Can be one or more of 'msl' (default), 'tas', 'uas', \
-                        'vas' corresponding to 'mean_sea_level_pressure', '2m_temperature', '10m_u_component_of_wind', and '10m_v_component_of_wind', respectively.",
+                        'vas' corresponding to 'mean_sea_level_pressure', '2m_temperature', '10m_u_component_of_wind', and '10m_v_component_of_wind', respectively. \
+                            Default: %(default)s",
     )
     download_parser.add_argument(
         "-s",
         "--start",
         default=DEFAULT_START_YEAR,
-        type=int,
-        help=f"Earliest year to download. (Default: {DEFAULT_START_YEAR})",
+        type=_validate_year,
+        help="Earliest year to download. (Default: %(default)s)",
     )
     download_parser.add_argument(
         "-n",
         "--end",
         default=DEFAULT_END_YEAR,
-        type=int,
-        help=f"Latest year to download. (Default: {DEFAULT_END_YEAR})",
+        type=_validate_year,
+        help="Latest year to download. (Default: %(default)s)",
     )
 
     # subcommand for running calculations
@@ -232,7 +271,7 @@ def _top_level_parser() -> argparse.ArgumentParser:
         nargs="?",
         type=int,
         default=1,
-        help="Number of processes used by joblib in parallel calculation.",
+        help="Number of processes used by joblib in parallel calculation. Default: %(default)s",
     )
     calc_parser.add_argument(
         "-M",
@@ -240,14 +279,14 @@ def _top_level_parser() -> argparse.ArgumentParser:
         type=int,
         nargs="?",
         default=1,
-        help="Max number of minima to locate in pressure field per time step.",
+        help="Max number of minima to locate in pressure field per time step. Default: %(default)s",
     )
 
     # subcommand for plotting
     plot_parser = subparsers.add_parser(
         "plot",
-        help="Plot pressure minima with mean sea level pressure fields.",
-        description="Takes an input CSV file containing pressure minima (output from calc subcommand) and mean sea level pressure field data and plots the output to file.",
+        help="Plot pressure minima with mean sea level pressure fields. Output to png supported.",
+        description="Takes an input CSV file containing pressure minima (output from calc subcommand) and mean sea level pressure field data and plots the output to png.",
     )
     plot_parser.set_defaults(func=_cli_plot)
     plot_parser = _cli_common_args(plot_parser)
@@ -262,8 +301,14 @@ def _top_level_parser() -> argparse.ArgumentParser:
         "-y",
         "--year",
         nargs="?",
-        type=int,
+        type=_validate_year,
         help="When present, plot only the year specified",
+    )
+    plot_parser.add_argument(
+        "--month",
+        nargs="?",
+        type=_validate_month,
+        help="When present, plot only the month specified. Requires --year to be present.",
     )
 
     return parser
@@ -279,3 +324,7 @@ def cli():
 
     # call the function specified, with the arguments supplied
     args.func(args)
+
+
+if __name__ == "__main__":
+    cli()

@@ -13,7 +13,6 @@ from tqdm import tqdm
 import xarray as xr
 
 from .params import ASL_REGION, CALCULATION_VERSION, SOFTWARE_VERSION, MASK_THRESHOLD
-from .plot import plot_lows
 from .utils import tqdm_joblib, configure_s3_bucket
 
 logger = logging.getLogger(__name__)
@@ -418,16 +417,22 @@ class ASLICalculator:
 
         logger.info(f"Importing ASL values from {filepath}")
 
+        # common arguments for read_csv
+        csv_read_kwargs = {
+            "header": header,
+            "parse_dates": ["time (mo)"],
+        }
+
         # If we are reading from s3 we will need to call our configuration file
         if str(filepath).startswith("s3://"):
             s3 = configure_s3_bucket(self.s3_config_dir, self.s3_config_filename)
 
             self.asl_df = pd.read_csv(
                 s3.open(filepath, mode="rb"),
-                header=header,
+                **csv_read_kwargs,
             )
         else:
-            self.asl_df = pd.read_csv(filepath, header=header)
+            self.asl_df = pd.read_csv(filepath, **csv_read_kwargs)
 
         self.asl_df.rename(
             columns={
@@ -440,36 +445,3 @@ class ASLICalculator:
             },
             inplace=True,
         )
-
-    def plot_region_all(self, **kwargs):
-        """Plots mean sea level pressure fields for the Amundsen Sea with identified low pressure and bounding box."""
-
-        if self.asl_df is None:
-            raise Warning(
-                f"ASL calculation dataframe is {self.as_df}, can not plot. \
-                          Try running .calculate() first."
-            )
-        plot_lows(self.masked_msl_data, self.asl_df, regionbox=ASL_REGION, **kwargs)
-
-    def plot_region_year(self, year: int, **kwargs):
-        """As for plot_region_all but selects only year
-
-        Args:
-            year (int): year to plot
-        """
-        if self.asl_df is None:
-            raise Warning(
-                f"ASL calculation dataframe is {self.as_df}, can not plot. \
-                          Try running .calculate() first."
-            )
-
-        da = self.masked_msl_data.sel(
-            valid_time=slice(str(year) + "0101", str(year) + "1201")
-        )
-
-        df = self.asl_df[
-            (self.asl_df.time >= str(year) + "-01-01")
-            & (self.asl_df.time <= str(year) + "-12-01")
-        ]
-
-        return plot_lows(da, df, regionbox=ASL_REGION, **kwargs)
