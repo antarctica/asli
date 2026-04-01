@@ -1,10 +1,13 @@
 """Helper functions for plotting ASLI data"""
 
+import math
+
 import cartopy.crs as ccrs
 import pandas as pd
 import matplotlib
 import matplotlib.figure
 import numpy as np
+import xarray as xr
 
 from .asli import ASLICalculator
 from .params import ASL_REGION
@@ -70,6 +73,8 @@ class Plotter:
         year: int,
         month: int,
         ax: matplotlib.axes.Axes = None,
+        width: float = 20,
+        height: float = 15,
         cmap: str = "Reds",
         colorbar: bool = False,
         border: int = 10,
@@ -106,7 +111,7 @@ class Plotter:
         """
         # If no axes provided, create a new standalone figure
         if ax is None:
-            fig = matplotlib.figure.Figure(figsize=(20, 15))
+            fig = matplotlib.figure.Figure(figsize=(width, height))
             ax = fig.add_subplot(
                 projection=ccrs.Stereographic(
                     central_longitude=0.0, central_latitude=-90.0
@@ -187,41 +192,61 @@ class Plotter:
 
         return fig, ax
 
-    def plot_year(self, year: int, *args, **kwargs):
+    def plot_da(self, da: xr.DataArray, n_cols: int = 3, *args, **kwargs):
+        """Plot a range of times from the DataArray
+
+        Args:
+            da (xr.DataArray): DataArray to plot.
+            n_cols (int): number of columns in which to arrange the plots.
+
+        Returns:
+            fig
+            ax
+        """
+
         # get the min and max values of the range to set consistent color scales
-        da_year = self.da.sel(valid_time=slice(f"{year}-01-01", f"{year}-12-01"))
-        min = np.nanmin(da_year.values)
-        max = np.nanmax(da_year.values)
+        min = np.nanmin(da.values)
+        max = np.nanmax(da.values)
 
         # if colorbar=True in call to this function, enable for first plot, but disable for the rest
         colorbar = kwargs.pop("colorbar") if kwargs.get("colorbar") else False
 
-        fig = matplotlib.figure.Figure(figsize=(20, 15))
+        n_months = len(da.valid_time)
+        n_rows = math.ceil(n_months / n_cols)
+        width = kwargs.get("width", n_cols * 5)
+        height = kwargs.get("height", n_rows * 5)
 
-        for month in range(1, 13):
+        fig = matplotlib.figure.Figure(figsize=(width, height))
+
+        for i in range(n_months):
             ax = fig.add_subplot(
-                3,
-                4,
-                month,
+                n_rows,
+                n_cols,
+                i + 1,
                 projection=ccrs.Stereographic(
                     central_longitude=0.0, central_latitude=-90.0
                 ),
             )
 
             fig, ax = self.plot_month(
-                year=year,
-                month=month,
+                year=int(da.isel(valid_time=i).valid_time.dt.year.values),
+                month=int(da.isel(valid_time=i).valid_time.dt.month.values),
                 ax=ax,
+                width=width,
+                height=height,
                 min=min,
                 max=max,
-                colorbar=True
-                if month == 1 and colorbar
-                else False,  # if colorbar=True in call to this function, enable for first plot, but disable for the rest
+                colorbar=True if i == 0 and colorbar else False,  # noqa  # if colorbar=True in call to this function, enable for first plot, but disable for the rest
                 *args,
                 **kwargs,
             )
 
         return fig, ax
 
+    def plot_year(self, year: int, *args, **kwargs):
+        da_year = self.da.sel(valid_time=slice(f"{year}-01-01", f"{year}-12-01"))
+
+        return self.plot_da(da_year, *args, **kwargs)
+
     def plot_all(self, *args, **kwargs):
-        pass
+        return self.plot_da(self.da, *args, **kwargs)
