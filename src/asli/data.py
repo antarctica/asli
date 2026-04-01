@@ -13,6 +13,16 @@ __all__ = ["CDSDownloader", "get_era5_monthly", "get_land_sea_mask"]
 
 
 class CDSDownloader:
+    """
+    Handles downloading of data from Climate Data Store
+
+    Args:
+        data_dir (str): Directory in which to place downloaded data.
+        request_params (dict): Dictionary of request parameters to pass to cdsapi
+        output_filename (str): name of files when downloaded, relative to data_dir.
+        area (dict): Dictionary with keys "north", "south", "east" and "west" defining the area bounds of the downloaded data.
+    """
+
     def __init__(
         self, data_dir: str, request_params: dict, output_filename: str, area: dict
     ):
@@ -31,6 +41,7 @@ class CDSDownloader:
             )
 
     def download(self):
+        """Runs the download from Climate Data Store"""
         logger.debug(f"request_params: {self.request_params}")
         c = cdsapi.Client()
         c.retrieve(
@@ -57,12 +68,13 @@ def get_era5_monthly(
     Downloads may queue for a considerable time depending on the CDS.
     Request progress can be tracked through your CDS account at: https://cds-beta.climate.copernicus.eu/requests
 
-    data_dir(str): path of data directory
-    vars (Sequence[str]): list of strings specifying variables to download. Can be one or more of "msl" (default), "tas", "uas", \
-        "vas" corresponding to "mean_sea_level_pressure", "2m_temperature", "10m_u_component_of_wind", and "10m_v_component_of_wind, respectively.
-    start_year(int): earliest year of data to download. (Default: 1953)
-    start_year(int): latest year of data to download. (Default: current year)
-    area(dict): either dictionary containing keys 'north', 'south', 'east', 'west' bounding coordinates of area to download (default) or None.
+    Args:
+        data_dir(str): path of data directory
+        vars (Sequence[str]): list of strings specifying variables to download. Can be one or more of "msl" (default), "tas", "uas", \
+            "vas" corresponding to "mean_sea_level_pressure", "2m_temperature", "10m_u_component_of_wind", and "10m_v_component_of_wind, respectively.
+        start_year(int): earliest year of data to download. (Default: 1953)
+        start_year(int): latest year of data to download. (Default: current year)
+        area(dict): either dictionary containing keys 'north', 'south', 'east', 'west' bounding coordinates of area to download (default) or None.
     """
 
     variables = [
@@ -128,9 +140,10 @@ def get_land_sea_mask(
     Downloads may queue for a considerable time depending on the CDS.
     Request progress can be tracked through your CDS account at: https://cds.climate.copernicus.eu/cdsapp#!/yourrequests
 
-    Params
-    data_dir(str): path of data directory
-    area(dict): either dictionary containing keys 'north', 'south', 'east', 'west' bounding coordinates of area to download (default) or None.
+    Args:
+        data_dir(str): path of data directory
+        filename (str): name to give downloaded mask file, relative to data_dir (Default: era5_lsm.nc)
+        area(dict): either dictionary containing keys 'north', 'south', 'east', 'west' bounding coordinates of area to download (default) or None.
     """
 
     request_params = {
@@ -152,6 +165,16 @@ def get_land_sea_mask(
 
 
 def _get_request_area(area: dict, border: float) -> dict:
+    """Takes a rectangular area and a border width, returning an area dictionary with additional surrounding border.
+
+    Args:
+        area (dict): Dictionary with keys "north", "south", "east" and "west" defining the area bounds of the downloaded data.
+        border (float): Width of border to add around area.
+
+    Returns:
+        dict: Dictionary with keys "north", "south", "east" and "west" defining the area bounds of the downloaded data.
+    """
+
     if area:
         logger.info(
             f"Area of N:{area['north']}, W:{area['west']}, S:{area['south']}, E:{area['east']} specified."
