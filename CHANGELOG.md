@@ -15,7 +15,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   + `asli_plot` is now `asli plot`
 + `--datadir` option for `asli calc` and `asli plot` has been removed; with the corresponding arguments in the python interface to `ASLICalculator` being removed. Data paths are now specified as full paths in order to improve user experience in the command line interface via utilising normal tab completion.
 + `filename` argument is changed to `filepath` throughout, reflecting change from specifying files relative to `data_dir`.
-
++ `asli.data.get_land_sea_mask` now downloads with `area=ASL_REGION` by default.
++ Substantial changes to the plotting interface, both the CLI and python API.
+  + Plotting methods have been removed from the `ASLICalculator` class.
+  + Python interface now implements a `asli.plot.Plotter` class to handle plotting, which takes an `ASLICalculator` instance as the sole init argument
+  + `Plotter` objects have `plot_all`, `plot_year` and `plot_month` methods and return a matplotlib figure and axes.
+  + `asli plot` now takes optional `--year` and `--month` options.
 
 ### Added
 + Log warning when no output file specified to `asli calc`.
