@@ -20,7 +20,7 @@ logger = logging.getLogger(__name__)
 __all__ = ["ASLICalculator"]
 
 
-def asl_sector_mean(
+def sector_mean(
     da: xr.DataArray,
     mask: xr.DataArray,
     region: Mapping[str, float] = ASL_REGION,
@@ -68,7 +68,7 @@ def get_lows(
 
     lons, lats = da.longitude.values, da.latitude.values
 
-    sector_mean_pres = asl_sector_mean(da, mask)
+    sector_mean_pres = sector_mean(da, mask)
     threshold = sector_mean_pres
 
     # Converting to datetime and dropping hourly data, not required
@@ -250,7 +250,7 @@ def slice_region(
 
 class ASLICalculator:
     """
-    Object to handle calculations of the Amundsen Sea Low Index
+    Object to handle calculations of the Amundsen Sea Low Index, or another similar pressure minima index.
 
     Args:
         mask_filename(str): filename for land-sea mask.
@@ -277,7 +277,7 @@ class ASLICalculator:
         self.masked_msl_data = None
         self.sliced_msl = None
         self.sliced_masked_msl = None
-        self.asl_df = None
+        self.minima_df = None
 
     def read_mask_data(self):
         """
@@ -399,11 +399,11 @@ class ASLICalculator:
 
         self.all_lows_dfs = pd.concat(lows_per_time, ignore_index=True)
 
-        self.asl_df = define_minima_per_time_in_region(self.all_lows_dfs)
-        return self.asl_df
+        self.minima_df = define_minima_per_time_in_region(self.all_lows_dfs)
+        return self.minima_df
 
     def to_csv(self, filepath: str) -> None:
-        """Writes out ASLICalculator.asl_df as a CSV file with header.
+        """Writes out ASLICalculator.minima_df as a CSV file with header.
 
         Args:
             filepath (str): filepath to write out to.
@@ -429,14 +429,14 @@ class ASLICalculator:
             calculation_version=CALCULATION_VERSION,
             software_version=SOFTWARE_VERSION,
             date_created=datetime.datetime.now().strftime("%Y%m%d"),
-            time_coverage_start=self.asl_df["time"].min(),
-            time_coverage_end=self.asl_df["time"].max(),
+            time_coverage_start=self.minima_df["time"].min(),
+            time_coverage_end=self.minima_df["time"].max(),
         )
 
         logger.info(f"Writing csv to {filepath}")
         with open(filepath, "w") as f:
             f.writelines(header)
-            self.asl_df.to_csv(f, index=False, header=None)
+            self.minima_df.to_csv(f, index=False, header=None)
 
     def import_from_csv(
         self, filepath: Union[str, Path], header: int = 33, force: bool = False
@@ -445,11 +445,11 @@ class ASLICalculator:
         Import a csv file exported from the .export_df method, for example to plot data from a previous session.
 
         Args:
-            filepath (str|Path, required): Path to csv file containing ASL dataframe.
+            filepath (str|Path, required): Path to csv file containing data produced by this package.
             header (int, optional): number of header rows in csv. Default: 33
             force (bool, optional): Overwrite existing calculations in this object. Defaults to False.
         """
-        if self.asl_df is not None and not force:
+        if self.minima_df is not None and not force:
             warnings.warn(
                 "Calculation dataframe has existing values, set force=True to overwrite with import."
             )
@@ -467,14 +467,14 @@ class ASLICalculator:
         if str(filepath).startswith("s3://"):
             s3 = configure_s3_bucket(self.s3_config_dir, self.s3_config_filename)
 
-            self.asl_df = pd.read_csv(
+            self.minima_df = pd.read_csv(
                 s3.open(filepath, mode="rb"),
                 **csv_read_kwargs,
             )
         else:
-            self.asl_df = pd.read_csv(filepath, **csv_read_kwargs)
+            self.minima_df = pd.read_csv(filepath, **csv_read_kwargs)
 
-        self.asl_df.rename(
+        self.minima_df.rename(
             columns={
                 "time (mo)": "time",
                 "longitude (degree)": "longitude",

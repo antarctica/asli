@@ -33,15 +33,15 @@ class TestASLICalculator(unittest.TestCase):
         assert isinstance(a.sliced_msl, xr.DataArray)
         assert isinstance(a.sliced_masked_msl, xr.DataArray)
 
-        assert a.asl_df is None
+        assert a.minima_df is None
 
         a.calculate()
-        assert isinstance(a.asl_df, pd.DataFrame)
-        assert a.asl_df.shape == (11, 7)
+        assert isinstance(a.minima_df, pd.DataFrame)
+        assert a.minima_df.shape == (11, 7)
 
         a.to_csv(self.temp_filename)
 
-        # should raise warning if a.asl_df already present and force option is false
+        # should raise warning if a.minima_df already present and force option is false
         with pytest.warns(UserWarning):
             a.import_from_csv(filepath=self.temp_filename)
 
@@ -53,5 +53,5 @@ class TestASLICalculator(unittest.TestCase):
         a.read_data()
 
         a.import_from_csv(filepath=Path("tests", "fixtures", "test_csv.csv"))
-        assert isinstance(a.asl_df, pd.DataFrame)
-        assert a.asl_df.shape == (11, 7)
+        assert isinstance(a.minima_df, pd.DataFrame)
+        assert a.minima_df.shape == (11, 7)

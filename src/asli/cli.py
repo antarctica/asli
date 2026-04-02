@@ -80,7 +80,7 @@ def _cli_plot(args):
 
 
 def _cli_calc(args):
-    """Command-line interface to ASL calculation."""
+    """Command-line interface to ASLI calculation."""
 
     if not args.output:
         logger.warning("No output file specified. Running calculations without output.")

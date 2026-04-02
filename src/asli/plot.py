@@ -21,7 +21,7 @@ class Plotter:
         """Plot monthly pressure contour plots with points marked as crosses."""
 
         self.da = aslicalculator.masked_msl_data
-        self.df = aslicalculator.asl_df
+        self.df = aslicalculator.minima_df
 
     @staticmethod
     def draw_regional_box(
