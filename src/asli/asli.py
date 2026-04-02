@@ -378,9 +378,9 @@ class ASLICalculator:
                 f"self.sliced_msl is {self.sliced_msl}, have you run .read_data()?"
             )
 
-        if "season" in self.sliced_msl.dims:
-            ntime = 4
-            slice_by = "season"
+        # if "season" in self.sliced_msl.dims:
+        #     ntime = 4
+        #     slice_by = "season"
         if "valid_time" in self.sliced_msl.dims:
             ntime = self.sliced_msl.valid_time.shape[0]
             slice_by = "valid_time"
