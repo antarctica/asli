@@ -4,13 +4,7 @@
 
 We advise installing this package and its dependencies in a python virtual environment using a tool such as [venv](https://docs.python.org/3/library/venv.html) or [conda](https://conda.io/projects/conda/en/latest/user-guide/getting-started.html#managing-python) (other virtual environment managers are available).
 
-Install the latest version of the package from PyPI using pip:
-
-```sh
-pip install asli
-```
-
-or from GitHub:
+Install the latest version of the package from GitHub using pip:
 
 ```sh
 pip install git+https://github.com/scotthosking/amundsen-sea-low-index

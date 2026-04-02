@@ -134,12 +134,6 @@ Additional arguments can be passed to all of these commands to control the plott
 The `asli` package also supports Zarr data import from s3 storage through the python interface. The method remains the same, but you will need to install the [s3] optional dependencies.
 
 ```sh
-pip install asli[s3]
-```
-
-or
-
-```sh
 pip install git+https://github.com/scotthosking/amundsen-sea-low-index[s3]
 ```
 

@@ -24,10 +24,10 @@ Documentation for the `asli` package can be found at <https://scotthosking.com/a
 
 ## Installation and Basic Usage
 
-Install with pip from PyPI (we recommend using a virtual environment):
+Install with pip from Github (we recommend using a virtual environment):
 
 ```sh
-pip install asli
+pip install git+https://github.com/scotthosking/amundsen-sea-low-index
 ```
 
 The following covers the most basic usage of the package, for full details see [the documentation](https://scotthosking.com/amundsen-sea-low-index).
