@@ -88,10 +88,12 @@ def _cli_calc(args):
     a = ASLICalculator(args.mask, args.msl_files[0])
     a.read_mask_data()
     a.read_msl_data(include_era5t=args.era5t)
-    a.calculate(args.numjobs, num_minima=args.minima)
+    a.calculate(n_jobs=args.numjobs, num_minima=args.minima)
 
     if args.output:
-        a.to_csv(args.output)
+        a.to_csv(
+            args.output, header=args.no_header, custom_header_template=args.template
+        )
 
 
 def _cli_get_era5_monthly(args):
@@ -280,6 +282,19 @@ def _top_level_parser() -> argparse.ArgumentParser:
         nargs="?",
         default=1,
         help="Max number of minima to locate in pressure field per time step. Default: %(default)s",
+    )
+    calc_parser.add_argument(
+        "-x",
+        "--no-header",
+        action="store_false",
+        help="When present, this flag disables the header in the CSV output.",
+    )
+    calc_parser.add_argument(
+        "-t",
+        "--template",
+        nargs="?",
+        type=str,
+        help="Path to a custom jinja2 CSV header template file, containing the variables:  calculation_version, software_version, date_created, time_coverage_start, time_coverage_end.",
     )
 
     # subcommand for plotting
