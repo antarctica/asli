@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## 0.2.0 - 2026-04-02
+
 ### Breaking changes
 + Command line interface has changed from `asli_calc` type separated program structure to one main program with subcommands, e.g. `asli calc`
   + `asli_calc` is now `asli calc`
