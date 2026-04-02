@@ -402,11 +402,18 @@ class ASLICalculator:
         self.minima_df = define_minima_per_time_in_region(self.all_lows_dfs)
         return self.minima_df
 
-    def to_csv(self, filepath: str) -> None:
+    def to_csv(
+        self,
+        filepath: str,
+        header: bool = True,
+        custom_header_template: str = None,
+    ) -> None:
         """Writes out ASLICalculator.minima_df as a CSV file with header.
 
         Args:
             filepath (str): filepath to write out to.
+            header (bool): if True (default), output with a templated header.
+            custom_header_template (str): If None (default) and header=True, will use internal asli template header. If supplied, must be a path to a jinja2 template file, containing the variables:  calculation_version, software_version, date_created, time_coverage_start, time_coverage_end.
         """
 
         # TODO handle source data, time_averaging and writing out all lows
@@ -420,22 +427,39 @@ class ASLICalculator:
         #     fname = indata+'/all_lows_'+time_averaging+'_v'+version_id+'.csv'
 
         # Set up jinja
-        from jinja2 import Environment, PackageLoader, select_autoescape
-
-        env = Environment(loader=PackageLoader("asli"), autoescape=select_autoescape())
-        template = env.get_template("asli_data.csv.template")
-
-        header = template.render(
-            calculation_version=CALCULATION_VERSION,
-            software_version=SOFTWARE_VERSION,
-            date_created=datetime.datetime.now().strftime("%Y%m%d"),
-            time_coverage_start=self.minima_df["time"].min(),
-            time_coverage_end=self.minima_df["time"].max(),
+        from jinja2 import (
+            Environment,
+            FileSystemLoader,
+            PackageLoader,
+            select_autoescape,
         )
+
+        if header:
+            if custom_header_template:
+                path = Path(custom_header_template)
+                env = Environment(
+                    loader=FileSystemLoader(path.parent), autoescape=select_autoescape()
+                )
+                template = env.get_template(path.name)
+
+            else:
+                env = Environment(
+                    loader=PackageLoader("asli"), autoescape=select_autoescape()
+                )
+                template = env.get_template("asli_data.csv.template")
+
+            header = template.render(
+                calculation_version=CALCULATION_VERSION,
+                software_version=SOFTWARE_VERSION,
+                date_created=datetime.datetime.now().strftime("%Y%m%d"),
+                time_coverage_start=self.minima_df["time"].min(),
+                time_coverage_end=self.minima_df["time"].max(),
+            )
 
         logger.info(f"Writing csv to {filepath}")
         with open(filepath, "w") as f:
-            f.writelines(header)
+            if header:
+                f.writelines(header)
             self.minima_df.to_csv(f, index=False, header=None)
 
     def import_from_csv(
