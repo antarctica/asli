@@ -1,9 +1,13 @@
 site_name: asli
 nav:
   - Home: index.md
-  - Usage: usage.md
+  - Usage:
+    - Installation: usage/index.md
+    - Command Line Interface: usage/cli.md
+    - Python API: usage/python.md
   - Method: method.md
   - Contributing: contributing.md
+  - Changelog: changelog.md
   - License: license.md
   - CLI Reference: cli.md
 theme:

@@ -62,11 +62,11 @@ def get_era5_monthly(
     """
     Download the ERA5 monthly averaged variables from the Climate Data Store (CDS).
     Uses the CDS API beta and therefore requires CDS account and API key.
-    Please see the CDS API documentation: https://cds-beta.climate.copernicus.eu/how-to-api
-    If running for the first time, may require agreement to CDS Terms of Use per dataset at https://cds-beta.climate.copernicus.eu/datasets/reanalysis-era5-single-levels-monthly-means?tab=download
+    Please see the CDS API documentation: https://cds.climate.copernicus.eu/how-to-api
+    If running for the first time, may require agreement to CDS T&Cs per dataset. See output for details.
 
     Downloads may queue for a considerable time depending on the CDS.
-    Request progress can be tracked through your CDS account at: https://cds-beta.climate.copernicus.eu/requests
+    Request progress can be tracked through your CDS account at: https://cds.climate.copernicus.eu/cdsapp#!/yourrequests
 
     Args:
         data_dir(str): path of data directory
@@ -143,7 +143,7 @@ def get_land_sea_mask(
     Args:
         data_dir(str): path of data directory
         filename (str): name to give downloaded mask file, relative to data_dir (Default: era5_lsm.nc)
-        area(dict): either dictionary containing keys 'north', 'south', 'east', 'west' bounding coordinates of area to download (default) or None.
+        area(dict): either dictionary containing keys 'north', 'south', 'east', 'west' bounding coordinates of area to download (Default: ASL region) or None to download globe.
     """
 
     request_params = {
