@@ -128,7 +128,7 @@ def get_era5_monthly(
 def get_land_sea_mask(
     data_dir: str,
     filename: str = "era5_lsm.nc",
-    area: dict = None,
+    area: dict = ASL_REGION,
     border: float = None,
 ):
     """
