@@ -1,10 +1,9 @@
 [build-system]
-requires = ["setuptools>=61"]
+requires = ["setuptools>=80", "setuptools-scm[simple]>=9.2"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "asli"
-version = "0.2.0"
 authors = [
     {name = "David Wyld", email="dalby@bas.ac.uk"},
     {name = "Thomas Zwagerman", email="thozwa@bas.ac.uk"},
@@ -14,6 +13,7 @@ description = "Amundsen Sea Low detection from mean sea level pressure fields."
 readme = "README.md"
 license = "MIT"
 license-files = ["LICENSE.md"]
+dynamic = ["version"]
 classifiers = [
     "Programming Language :: Python",
     "Programming Language :: Python :: 3",
@@ -55,6 +55,10 @@ where = ["src"]
 
 [tool.setuptools.package-data]
 asli = ["templates/asli_data.csv.template"]
+
+
+[tool.setuptools_scm]
+version_file = "src/asli/_version.py"
 
 [project.urls]
 Homepage = "https://scotthosking.com/asl_index"
