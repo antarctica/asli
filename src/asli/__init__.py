@@ -2,6 +2,7 @@
 
 # Import the asli class here for nicer namespace
 from .asli import ASLICalculator  # noqa
+from .plot import Plotter  # noqa
 
 from . import data, plot, utils  # noqa
 
