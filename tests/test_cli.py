@@ -1,6 +1,11 @@
+import os
+from pathlib import Path
+import tempfile
+import unittest
 from unittest.mock import patch
 
-from asli.cli import _parse_args, _top_level_parser
+
+from asli.cli import _parse_args, _top_level_parser, cli
 
 
 def test_get_cli_lsm_args():
@@ -28,3 +33,70 @@ def test_get_cli_lsm_args():
 
         assert args.e is True
         assert args.area_dict is None
+
+
+class TestCliCalc(unittest.TestCase):
+    def setUp(self):
+        self.lsm_file = str(Path("tests", "fixtures", "test_lsm.nc"))
+        self.msl_file = str(Path("tests", "fixtures", "test_era5_msl.nc"))
+        self.temp_filename = tempfile.NamedTemporaryFile(delete=False).name
+
+    def tearDown(self):
+        os.remove(self.temp_filename)
+
+    def test_cli_calc(self):
+        # first without output
+        with patch("sys.argv", ["_", "calc", "--mask", self.lsm_file, self.msl_file]):
+            cli()
+
+        # then with output
+        with patch(
+            "sys.argv",
+            [
+                "_",
+                "calc",
+                "--output",
+                self.temp_filename,
+                "--mask",
+                self.lsm_file,
+                self.msl_file,
+            ],
+        ):
+            cli()
+
+
+class TestCliPlot(unittest.TestCase):
+    def setUp(self):
+        self.lsm_file = str(Path("tests", "fixtures", "test_lsm.nc"))
+        self.msl_file = str(Path("tests", "fixtures", "test_era5_msl.nc"))
+
+    def tearDown(self):
+        pass
+
+    def test_cli_plot_all(self):
+        with patch("sys.argv", ["_", "plot", "--mask", self.lsm_file, self.msl_file]):
+            cli()
+
+    def test_cli_plot_year(self):
+        with patch(
+            "sys.argv",
+            ["_", "plot", "--year", "2024", "--mask", self.lsm_file, self.msl_file],
+        ):
+            cli()
+
+    def test_cli_plot_month(self):
+        with patch(
+            "sys.argv",
+            [
+                "_",
+                "plot",
+                "--year",
+                "2024",
+                "--month",
+                "4",
+                "--mask",
+                self.lsm_file,
+                self.msl_file,
+            ],
+        ):
+            cli()
