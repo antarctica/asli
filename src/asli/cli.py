@@ -230,6 +230,12 @@ def _top_level_parser() -> argparse.ArgumentParser:
         help="Download the land-sea mask, instead of the era5 variables. If this flag is present, vars, start, end will be ignored.",
     )
     download_parser.add_argument(
+        "-f",
+        "--filename",
+        default="era5_lsm.nc",
+        help="Filename for land sea mask file once downloaded. Not applicable unless --lsm option present. (Default: %(default)s)",
+    )
+    download_parser.add_argument(
         "-v",
         "--vars",
         nargs="?",
