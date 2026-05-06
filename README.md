@@ -68,3 +68,10 @@ The ASL calculation is derived from ERA5 data downloaded from the Copernicus Cli
 > Hersbach, H., Bell, B., Berrisford, P., Biavati, G., Horányi, A., Muñoz Sabater, J., Nicolas, J., Peubey, C., Radu, R., Rozum, I., Schepers, D., Simmons, A., Soci, C., Dee, D., Thépaut, J-N. (2018): ERA5 hourly data on single levels from 1940 to present. Copernicus Climate Change Service (C3S) Climate Data Store (CDS), DOI: 10.24381/cds.adbb2d47 , (Accessed on DD-MMM-YYYY)
 
 See the [ECMWF wiki for further information on citing ERA5](https://confluence.ecmwf.int/display/CKB/Use+Case+2%3A+ERA5+hourly+data+on+single+levels+from+1940+to+present).
+
+
+## Contact
+
+The maintainers of this repository are David Wyld ([@davidwyld](https://github.com/davidwyld/)) and Scott Hosking ([@scotthosking](https://github.com/scotthosking/)).
+
+Please  submit bug reports and feature requests as issues [on the GitHub repo](https://github.com/scotthosking/amundsen-sea-low-index/issues/new) or if you don't have a GitHub account please [contact the maintainers by email](mailto:dalby@bas.ac.uk,shosking@turing.ac.uk?subject=ASLI%20Repo).
