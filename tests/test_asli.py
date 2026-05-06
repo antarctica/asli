@@ -1,0 +1,57 @@
+import os
+from pathlib import Path
+import tempfile
+import unittest
+
+import pandas as pd
+import pytest
+import xarray as xr
+
+import asli
+
+
+class TestASLICalculator(unittest.TestCase):
+    def setUp(self):
+        self.lsm_file = str(Path("tests", "fixtures", "test_lsm.nc"))
+        self.msl_file = str(Path("tests", "fixtures", "test_era5_msl.nc"))
+        self.temp_filename = tempfile.NamedTemporaryFile(delete=False).name
+
+    def tearDown(self):
+        os.remove(self.temp_filename)
+
+    def test_calculate(self):
+        a = asli.ASLICalculator(
+            mask_filename=self.lsm_file,
+            msl_pattern=self.msl_file,
+        )
+        a.read_data()
+
+        assert a.land_sea_mask is not None
+        assert a.raw_msl_data is not None
+
+        assert isinstance(a.masked_msl_data, xr.DataArray)
+        assert isinstance(a.sliced_msl, xr.DataArray)
+        assert isinstance(a.sliced_masked_msl, xr.DataArray)
+
+        assert a.minima_df is None
+
+        a.calculate()
+        assert isinstance(a.minima_df, pd.DataFrame)
+        assert a.minima_df.shape == (11, 7)
+
+        a.to_csv(self.temp_filename)
+
+        # should raise warning if a.minima_df already present and force option is false
+        with pytest.warns(UserWarning):
+            a.import_from_csv(filepath=self.temp_filename)
+
+    def test_import_csv(self):
+        a = asli.ASLICalculator(
+            mask_filename=self.lsm_file,
+            msl_pattern=self.msl_file,
+        )
+        a.read_data()
+
+        a.import_from_csv(filepath=Path("tests", "fixtures", "test_csv.csv"))
+        assert isinstance(a.minima_df, pd.DataFrame)
+        assert a.minima_df.shape == (11, 7)

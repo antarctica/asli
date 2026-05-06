@@ -1,0 +1,103 @@
+[build-system]
+requires = ["setuptools>=80", "setuptools-scm[simple]>=9.2"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "asli"
+authors = [
+    {name = "David Wyld", email="dalby@bas.ac.uk"},
+    {name = "Thomas Zwagerman", email="thozwa@bas.ac.uk"},
+    {name = "J. Scott Hosking", email="jshosking@gmail.com"},
+]
+description = "Amundsen Sea Low detection from mean sea level pressure fields."
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE.md"]
+dynamic = ["version"]
+classifiers = [
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Operating System :: OS Independent",
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Science/Research",
+    "Natural Language :: English",
+    "Topic :: Scientific/Engineering",
+]
+requires-python = ">=3.9"
+dependencies = [
+    "cdsapi>=0.7.5",
+    "cartopy",
+    "dask",
+    "joblib",
+    "matplotlib",
+    "netcdf4",
+    "numpy",
+    "pandas",
+    "scikit-image",
+    "xarray",
+    "jinja2"
+]
+
+[project.optional-dependencies]
+s3 = [
+    "s3fs",
+    "zarr"
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+asli = ["templates/asli_data.csv.template"]
+
+
+[tool.setuptools_scm]
+version_file = "src/asli/_version.py"
+
+[project.urls]
+Homepage = "https://scotthosking.com/asl_index"
+Source = "https://github.com/scotthosking/amundsen-sea-low-index"
+Bug_Tracker = "https://github.com/scotthosking/amundsen-sea-low-index/issues"
+Documentation = "https://scotthosking.com/amundsen-sea-low-index"
+Changelog = "https://github.com/me/spam/blob/master/CHANGELOG.md"
+
+[dependency-groups]
+test = [
+    "pytest",
+    "pytest-cov",
+]
+docs = [
+    "mkdocs",
+    "mkdocs-mmaterial",
+    "mkdocs-autoapi[python]",
+    "mkdocstrings[python]",
+    "mkdocs-include-markdown-plugin",
+]
+dev = [
+    "pre-commit",
+    "ruff"
+]
+
+[project.scripts]
+asli = "asli:cli.cli"
+
+
+[tool.pytest.ini_options]
+testpaths = [
+    "tests"
+]
+
+[tool.coverage.run]
+branch = true
+source = [
+    "src/",
+]
+omit = [
+    "src/asli/templates/*",
+    ]

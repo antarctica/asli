@@ -1,0 +1,28 @@
+# This CITATION.cff file was generated with cffinit.
+# Visit https://bit.ly/cffinit to generate yours today!
+
+cff-version: 1.2.0
+title: asli
+message: >-
+  If you use this software, please cite it using the
+  metadata from this file.
+type: software
+authors:
+  - given-names: David
+    family-names: Wyld
+    email: dalby@bas.ac.uk
+    affiliation: British Antarctic Survey
+    orcid: 'https://orcid.org/0000-0002-6553-8739'
+  - given-names: Thomas
+    family-names: Zwagerman
+    email: thozwa@bas.ac.uk
+    affiliation: British Antarctic Survey
+    orcid: 'https://orcid.org/0009-0003-3742-3234'
+  - given-names: J. Scott
+    family-names: Hosking
+    email: jshosking@gmail.com
+    affiliation: British Antarctic Survey
+    orcid: 'https://orcid.org/0000-0002-3646-3504'
+repository-code: 'https://github.com/scotthosking/amundsen-sea-low-index'
+url: 'https://scotthosking.com/asl_index'
+license: MIT
