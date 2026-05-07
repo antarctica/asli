@@ -6,7 +6,7 @@
 [![Documentation](https://img.shields.io/badge/Documentation-blue)](https://antarctica.github.io/asli/)
 
 <p align="center">
-  <img width="460" src="./docs/images/asl.jpg">
+  <img width="460" src="https://raw.githubusercontent.com/antarctica/asli/refs/heads/main/docs/images/asl.jpg">
 </p>
 
 The Amundsen Sea Low (ASL) is a highly dynamic and mobile climatological low pressure system located in the Pacific sector of the Southern Ocean. In this sector, variability in sea-level pressure is greater than anywhere in the Southern Hemisphere, making it challenging to isolate local fluctuations in the ASL from larger-scale shifts in atmospheric pressure. The position and strength of the ASL are crucial for understanding regional change over West Antarctica.
