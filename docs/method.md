@@ -28,7 +28,7 @@ This page describes the version `3.20240813` method currently in use, but previo
 ### Version 3
 Version 3 is derived using ERA5 data with an updated algorithm written in python.
 
-The version number 3.20240813 is used for the current packaged implementation of the version 3 python-based method, but differs only in that it is structured as a package. The code for version 3 is at <https://github.com/scotthosking/amundsen-sea-low-index>
+The version number 3.20240813 is used for the current packaged implementation of the version 3 python-based method, but differs only in that it is structured as a package. The code for version 3 is at <https://github.com/antarctica/asli/tree/calculation_v3_archive>
 
 
 <br>
