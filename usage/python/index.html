@@ -1097,7 +1097,7 @@ key: &lt;PERSONAL-ACCESS-TOKEN&gt;
 <p>Additional arguments can be passed to all of these commands to control the plotting, for full details see <code>plot_month</code> in the <a href="../../autoapi/asli/plot#asli.plot.Plotter.plot_month">API reference</a>.</p>
 <h2 id="working-with-zarr-and-object-storage">Working with Zarr and Object Storage<a class="headerlink" href="#working-with-zarr-and-object-storage" title="Permanent link">&para;</a></h2>
 <p>The <code>asli</code> package also supports Zarr data import from s3 storage through the python interface. The method remains the same, but you will need to install the [s3] optional dependencies.</p>
-<div class="highlight"><pre><span></span><code>pip<span class="w"> </span>install<span class="w"> </span>git+https://github.com/antarctica/asli<span class="o">[</span>s3<span class="o">]</span>
+<div class="highlight"><pre><span></span><code>pip<span class="w"> </span>install<span class="w"> </span>bas-asli<span class="o">[</span>s3<span class="o">]</span>
 </code></pre></div>
 <p>Additionally you will need to provide the location of your s3 config file, to the <code>ASLICalculator</code> class:</p>
 <div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
