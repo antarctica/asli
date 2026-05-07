@@ -1,10 +1,10 @@
 # ASLI (Amundsen Sea Low Index)
 
-![GitHub License](https://img.shields.io/github/license/davidwyld/amundsen-sea-low-index)
-![Python Version from PEP 621 TOML](https://img.shields.io/python/required-version-toml?tomlFilePath=https%3A%2F%2Fraw.githubusercontent.com%2Fdavidwyld%2Famundsen-sea-low-index%2Fpackaging%2Fpyproject.toml)
-![tests](https://github.com/davidwyld/amundsen-sea-low-index/actions/workflows/tests.yml/badge.svg)
-[![Static Badge](https://img.shields.io/badge/GitHub_repo-black?logo=github)](https://github.com/davidwyld/amundsen-sea-low-index)
-[![Documentation](https://img.shields.io/badge/Documentation-blue)](https://davidwyld.github.io/amundsen-sea-low-index/)
+![GitHub License](https://img.shields.io/github/license/antarctica/asli)
+![Python Version from PEP 621 TOML](https://img.shields.io/python/required-version-toml?tomlFilePath=https%3A%2F%2Fraw.githubusercontent.com%2Fantarctica%2Fasli%2Fpackaging%2Fpyproject.toml)
+![tests](https://github.com/antarctica/asli/actions/workflows/tests.yml/badge.svg)
+[![Static Badge](https://img.shields.io/badge/GitHub_repo-black?logo=github)](https://github.com/antarctica/asli)
+[![Documentation](https://img.shields.io/badge/Documentation-blue)](https://antarctica.github.io/asli/)
 
 <p align="center">
   <img width="460" src="./docs/images/asl.jpg">
@@ -18,7 +18,7 @@ If you're looking for the regularly updated ASLI dataset, it will soon be publis
 
 More information can be found at <https://scotthosking.com/asl_index>
 
-Documentation for the `asli` package can be found at <https://scotthosking.com/amundsen-sea-low-index>
+Documentation for the `asli` package can be found at <https://antarctica.github.io/asli>.
 
 **Note on versioning:** For reproducible workflows, we suggest pinning the exact version of the package in your `requirements.txt`, `pyproject.toml` or similar since we can not guarantee non-breaking changes between versions.
 
@@ -27,10 +27,10 @@ Documentation for the `asli` package can be found at <https://scotthosking.com/a
 Install with pip from Github (we recommend using a virtual environment):
 
 ```sh
-pip install git+https://github.com/scotthosking/amundsen-sea-low-index
+pip install git+https://github.com/antartica/asli
 ```
 
-The following covers the most basic usage of the package, for full details see [the documentation](https://scotthosking.com/amundsen-sea-low-index).
+The following covers the most basic usage of the package, for full details see [the documentation](https://antarctica.github.io/asli).
 
 Download mean sea level pressure data from the Climate Data Store (CDS) using the command-line interface:
 
@@ -59,7 +59,7 @@ If using the `asli` package please cite both this repository (see "Cite this rep
 
 > Hosking, J. S., A. Orr, T. J. Bracegirdle, and J. Turner (2016), Future circulation changes off West Antarctica: Sensitivity of the Amundsen Sea Low to projected anthropogenic forcing, Geophys. Res. Lett., 43, 367–376, doi:10.1002/2015GL067143.
 
->  Wyld, D., Zwagerman, T. and Hosking, J. S. asli [Computer software]. https://github.com/scotthosking/amundsen-sea-low-index
+>  Wyld, D., Zwagerman, T. and Hosking, J. S. asli [Computer software]. https://github.com/antarctica/asli
 
 The ASL calculation is derived from ERA5 data downloaded from the Copernicus Climate Data Store. These should be cited as follows:
 
@@ -74,4 +74,4 @@ See the [ECMWF wiki for further information on citing ERA5](https://confluence.e
 
 The maintainers of this repository are David Wyld ([@davidwyld](https://github.com/davidwyld/)) and Scott Hosking ([@scotthosking](https://github.com/scotthosking/)).
 
-Please  submit bug reports and feature requests as issues [on the GitHub repo](https://github.com/scotthosking/amundsen-sea-low-index/issues/new) or if you don't have a GitHub account please [contact the maintainers by email](mailto:dalby@bas.ac.uk,shosking@turing.ac.uk?subject=ASLI%20Repo).
+Please  submit bug reports and feature requests as issues [on the GitHub repo](https://github.com/antarctica/asli/issues/new) or if you don't have a GitHub account please [contact the maintainers by email](mailto:dalby@bas.ac.uk,shosking@turing.ac.uk?subject=ASLI%20Repo).

@@ -7,7 +7,7 @@ We advise installing this package and its dependencies in a python virtual envir
 Install the latest version of the package from GitHub using pip:
 
 ```sh
-pip install git+https://github.com/scotthosking/amundsen-sea-low-index
+pip install git+https://github.com/antarctica/asli
 ```
 
 ## Overview

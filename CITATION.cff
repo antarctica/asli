@@ -23,6 +23,6 @@ authors:
     email: jshosking@gmail.com
     affiliation: British Antarctic Survey
     orcid: 'https://orcid.org/0000-0002-3646-3504'
-repository-code: 'https://github.com/scotthosking/amundsen-sea-low-index'
-url: 'https://scotthosking.com/asl_index'
+repository-code: 'https://github.com/antarctica/asli'
+url: 'https://antarctica.github.io/asli'
 license: MIT

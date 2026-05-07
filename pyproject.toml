@@ -61,10 +61,10 @@ asli = ["templates/asli_data.csv.template"]
 version_file = "src/asli/_version.py"
 
 [project.urls]
-Homepage = "https://scotthosking.com/asl_index"
-Source = "https://github.com/scotthosking/amundsen-sea-low-index"
-Bug_Tracker = "https://github.com/scotthosking/amundsen-sea-low-index/issues"
-Documentation = "https://scotthosking.com/amundsen-sea-low-index"
+Homepage = "https://antarctica.github.io/asli"
+Source = "https://github.com/antarctica/asli"
+Bug_Tracker = "https://github.com/antarctica/asli/issues"
+Documentation = "https://antarctica.github.io/asli"
 Changelog = "https://github.com/me/spam/blob/master/CHANGELOG.md"
 
 [dependency-groups]
