@@ -23,10 +23,10 @@ Documentation for the `asli` package can be found at <https://antarctica.github.
 
 ## Installation and Basic Usage
 
-Install with pip from Github (we recommend using a virtual environment):
+Install with pip (we recommend using a virtual environment):
 
 ```sh
-pip install git+https://github.com/antartica/asli
+pip install bas-asli
 ```
 
 The following covers the most basic usage of the package, for full details see [the documentation](https://antarctica.github.io/asli).
