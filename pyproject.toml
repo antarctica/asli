@@ -3,7 +3,7 @@ requires = ["setuptools>=80", "setuptools-scm[simple]>=9.2"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "asli"
+name = "bas-asli"
 authors = [
     {name = "David Wyld", email="dalby@bas.ac.uk"},
     {name = "Thomas Zwagerman", email="thozwa@bas.ac.uk"},
@@ -81,7 +81,11 @@ docs = [
 ]
 dev = [
     "pre-commit",
-    "ruff"
+    "ruff",
+]
+build = [
+    "build",
+    "twine",
 ]
 
 [project.scripts]
