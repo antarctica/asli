@@ -410,13 +410,85 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#developer-guide" class="md-nav__link">
+  <a href="#contributing-guide" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Developer Guide
+        Contributing Guide
       
     </span>
   </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#maintainer-guide" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Maintainer Guide
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Maintainer Guide">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#changelog" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Changelog
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#testing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Testing
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#release-management" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Release Management
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#publishing-to-pypi" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Publishing to PyPI
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#publishing-the-docs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Publishing the docs
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -841,13 +913,85 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#developer-guide" class="md-nav__link">
+  <a href="#contributing-guide" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Developer Guide
+        Contributing Guide
       
     </span>
   </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#maintainer-guide" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Maintainer Guide
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Maintainer Guide">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#changelog" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Changelog
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#testing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Testing
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#release-management" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Release Management
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#publishing-to-pypi" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Publishing to PyPI
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#publishing-the-docs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Publishing the docs
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -871,7 +1015,7 @@
 <h1 id="contributing">Contributing<a class="headerlink" href="#contributing" title="Permanent link">&para;</a></h1>
 <p>We welcome contributions and improvements to this package!</p>
 <p>Please submit bug reports and feature requests as issues <a href="https://github.com/antarctica/asli/issues/new">on the GitHub repo</a>.</p>
-<h2 id="developer-guide">Developer Guide<a class="headerlink" href="#developer-guide" title="Permanent link">&para;</a></h2>
+<h2 id="contributing-guide">Contributing Guide<a class="headerlink" href="#contributing-guide" title="Permanent link">&para;</a></h2>
 <p>When making changes to the source code (including to the docs):</p>
 <ol>
 <li>Fork this repository on GitHub.</li>
@@ -881,6 +1025,33 @@
 <li>Make your changes and run the tests using pytest: <code>pytest</code> and/or test the docs build using <code>mkdocs build</code>.</li>
 <li>Commit and push your changes to GitHub and open a pull request to the main repo.</li>
 </ol>
+<h2 id="maintainer-guide">Maintainer Guide<a class="headerlink" href="#maintainer-guide" title="Permanent link">&para;</a></h2>
+<p>These instructions are intended for the maintainers.</p>
+<h3 id="changelog">Changelog<a class="headerlink" href="#changelog" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Ensure that changes are recorded in the changelog under the <code>[Unreleased]</code> section with appropriate headings, e.g. "Breaking Changes", "Fixed", "Added", "Removed".</li>
+</ul>
+<h3 id="testing">Testing<a class="headerlink" href="#testing" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Tests must be run manually, GitHub actions are not enabled on this repository. Do so with <code>pytest</code></li>
+</ul>
+<h3 id="release-management">Release Management<a class="headerlink" href="#release-management" title="Permanent link">&para;</a></h3>
+<ul>
+<li>In <code>CHANGELOG.md</code> create a new heading for all the unreleased changes, with the version and date.</li>
+<li>Add a new tag, beginning with <code>v</code>, following <a href="https://semver.org/">semantic versioning</a> practices.</li>
+<li>On GitHub, create a new release. Copy in the changes from the changelog.</li>
+</ul>
+<h3 id="publishing-to-pypi">Publishing to PyPI<a class="headerlink" href="#publishing-to-pypi" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Install the build dependencies <code>pip install --group build</code></li>
+<li><strong>With no uncommitted changes and with the correct tag checked out</strong> run <code>python -m build</code> - this will build to <code>dist/</code></li>
+<li>Run <code>twine check dist/bas_asli-X.Y.Z*</code> where <code>X.Y.Z</code> is the version to publish.</li>
+<li>Run <code>twine upload dist/bas_asli-X.Y.Z*</code> (you will need to authenticate with PyPI).</li>
+</ul>
+<h3 id="publishing-the-docs">Publishing the docs<a class="headerlink" href="#publishing-the-docs" title="Permanent link">&para;</a></h3>
+<ul>
+<li>To publish the documentation to GitHub pages, run <code>mkdocs gh-deploy</code>.</li>
+</ul>
 
 
 
