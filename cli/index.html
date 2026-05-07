@@ -1,0 +1,1071 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../license/">
+      
+      
+        <link rel="next" href="../autoapi/asli/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.4">
+    
+    
+      
+        <title>CLI Reference - asli</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.484c7ddc.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/_mkdocstrings.css">
+    
+      <link rel="stylesheet" href="../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#cli-reference" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="asli" class="md-header__button md-logo" aria-label="asli" data-md-component="logo">
+      
+  <img src="https://cdn.web.bas.ac.uk/bas-style-kit/0.7.3/img/logos-symbols/bas-logo-inverse-transparent-64.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            asli
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              CLI Reference
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="asli" class="md-nav__button md-logo" aria-label="asli" data-md-component="logo">
+      
+  <img src="https://cdn.web.bas.ac.uk/bas-style-kit/0.7.3/img/logos-symbols/bas-logo-inverse-transparent-64.png" alt="logo">
+
+    </a>
+    asli
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Usage
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Usage
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../usage/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Installation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../usage/cli/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Command Line Interface
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../usage/python/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Python API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../method/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Method
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../contributing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Contributing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../changelog/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Changelog
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../license/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    License
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CLI Reference
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CLI Reference
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#download" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        download
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#calc" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        calc
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#plot" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        plot
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Reference
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    API Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_8_1" id="__nav_8_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    asli
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_8_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    asli
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../autoapi/asli/_version/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    _version
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../autoapi/asli/asli/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    asli
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../autoapi/asli/cli/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    cli
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../autoapi/asli/data/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    data
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../autoapi/asli/params/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    params
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../autoapi/asli/plot/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    plot
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../autoapi/asli/utils/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    utils
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#download" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        download
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#calc" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        calc
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#plot" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        plot
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="cli-reference">CLI Reference<a class="headerlink" href="#cli-reference" title="Permanent link">&para;</a></h1>
+<p>Documentation for the <code>asli</code> script.
+<div class="highlight"><pre><span></span><code><span class="go">asli --help</span>
+</code></pre></div></p>
+<pre style="font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">
+<code style="font-family:inherit" class="nohighlight">
+<span style="color: #000080; text-decoration-color: #000080; font-weight: bold">usage: </span><span style="color: #800080; text-decoration-color: #800080; font-weight: bold">asli</span> [<span style="color: #008000; text-decoration-color: #008000">-h</span>] <span style="color: #008000; text-decoration-color: #008000">{download,calc,plot} ...</span>
+
+Command line interface to download source data, calculate and plot pressure minima using asli.
+
+<span style="color: #000080; text-decoration-color: #000080; font-weight: bold">positional arguments:</span>
+  <span style="color: #008000; text-decoration-color: #008000; font-weight: bold">{download,calc,plot}</span>  Available subcommands
+    <span style="color: #008000; text-decoration-color: #008000; font-weight: bold">download</span>            Download ERA5 or land-sea mask data from the Climate Data Store.
+    <span style="color: #008000; text-decoration-color: #008000; font-weight: bold">calc</span>                Calculates the pressure minima index from mean sea level pressure fields.
+    <span style="color: #008000; text-decoration-color: #008000; font-weight: bold">plot</span>                Plot pressure minima with mean sea level pressure fields. Output to png supported.
+
+<span style="color: #000080; text-decoration-color: #000080; font-weight: bold">options:</span>
+  <span style="color: #008000; text-decoration-color: #008000; font-weight: bold">-h</span>, <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">--help</span>            show this help message and exit
+
+</code>
+</pre>
+
+<h2 id="download">download<a class="headerlink" href="#download" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="go">asli download --help</span>
+</code></pre></div>
+<pre style="font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">
+<code style="font-family:inherit" class="nohighlight">
+<span style="color: #000080; text-decoration-color: #000080; font-weight: bold">usage: </span><span style="color: #800080; text-decoration-color: #800080; font-weight: bold">asli download</span> [<span style="color: #008000; text-decoration-color: #008000">-h</span>] [<span style="color: #008000; text-decoration-color: #008000">-d </span><span style="color: #808000; text-decoration-color: #808000">DATADIR</span>] [<span style="color: #008000; text-decoration-color: #008000">-e</span>] [<span style="color: #008000; text-decoration-color: #008000">-a </span><span style="color: #808000; text-decoration-color: #808000">AREA AREA AREA AREA</span>] [<span style="color: #008000; text-decoration-color: #008000">-b </span><span style="color: #808000; text-decoration-color: #808000">[BORDER]</span>] [<span style="color: #008080; text-decoration-color: #008080">--lsm</span>] [<span style="color: #008000; text-decoration-color: #008000">-f </span><span style="color: #808000; text-decoration-color: #808000">FILENAME</span>] [<span style="color: #008000; text-decoration-color: #008000">-v </span><span style="color: #808000; text-decoration-color: #808000">[VARS]</span>] [<span style="color: #008000; text-decoration-color: #008000">-s </span><span style="color: #808000; text-decoration-color: #808000">START</span>] [<span style="color: #008000; text-decoration-color: #008000">-n </span><span style="color: #808000; text-decoration-color: #808000">END</span>]
+
+Downloads the ERA5 monthly averaged data or land-sea mask from the Climate Data Store (CDS). Uses the CDS API and therefore requires CDS account and API key. Please see the CDS API documentation: https://cds.climate.copernicus.eu/how-to-api If running for the first
+time, may require agreement to CDS T&amp;Cs per dataset. See output for details. Downloads may queue for a considerable time depending on the CDS. Request progress can be tracked through your CDS account at: https://cds.climate.copernicus.eu/requests
+
+<span style="color: #000080; text-decoration-color: #000080; font-weight: bold">options:</span>
+  <span style="color: #008000; text-decoration-color: #008000; font-weight: bold">-h</span>, <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">--help</span>            show this help message and exit
+  <span style="color: #008000; text-decoration-color: #008000; font-weight: bold">-d</span>, <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">--datadir</span> <span style="color: #808000; text-decoration-color: #808000; font-weight: bold">DATADIR</span>
+                        Path to directory in which to put downloaded data. (Default: ./data)
+  <span style="color: #008000; text-decoration-color: #008000; font-weight: bold">-e</span>                    Download entire earth. i.e. don&#x27;t restrict to bounds specified using &#x27;-a&#x27;.
+  <span style="color: #008000; text-decoration-color: #008000; font-weight: bold">-a</span>, <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">--area</span> <span style="color: #808000; text-decoration-color: #808000; font-weight: bold">AREA AREA AREA AREA</span>
+                        Bounding coordinates for data download: N W S E. Optional. Overridden by &#x27;-e&#x27; option. (Default: bounds of Amundsen Sea: [-60.0, 170.0, -80.0, 298.0])
+  <span style="color: #008000; text-decoration-color: #008000; font-weight: bold">-b</span>, <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">--border</span> <span style="color: #808000; text-decoration-color: #808000; font-weight: bold">[BORDER]</span>
+                        Additional border around &lt;area&gt; to download in degrees. Default: 0.0
+  <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">--lsm</span>                 Download the land-sea mask, instead of the era5 variables. If this flag is present, vars, start, end will be ignored.
+  <span style="color: #008000; text-decoration-color: #008000; font-weight: bold">-f</span>, <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">--filename</span> <span style="color: #808000; text-decoration-color: #808000; font-weight: bold">FILENAME</span>
+                        Filename for land sea mask file once downloaded. Not applicable unless --lsm option present. (Default: era5_lsm.nc)
+  <span style="color: #008000; text-decoration-color: #008000; font-weight: bold">-v</span>, <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">--vars</span> <span style="color: #808000; text-decoration-color: #808000; font-weight: bold">[VARS]</span>     comma-separated list of strings specifying variables to download. Can be one or more of &#x27;msl&#x27; (default), &#x27;tas&#x27;, &#x27;uas&#x27;, &#x27;vas&#x27; corresponding to &#x27;mean_sea_level_pressure&#x27;, &#x27;2m_temperature&#x27;, &#x27;10m_u_component_of_wind&#x27;, and &#x27;10m_v_component_of_wind&#x27;,
+                        respectively. Default: msl,
+  <span style="color: #008000; text-decoration-color: #008000; font-weight: bold">-s</span>, <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">--start</span> <span style="color: #808000; text-decoration-color: #808000; font-weight: bold">START</span>     Earliest year to download. (Default: 1959)
+  <span style="color: #008000; text-decoration-color: #008000; font-weight: bold">-n</span>, <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">--end</span> <span style="color: #808000; text-decoration-color: #808000; font-weight: bold">END</span>         Latest year to download. (Default: 2026)
+
+</code>
+</pre>
+
+<h2 id="calc">calc<a class="headerlink" href="#calc" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="go">asli calc --help</span>
+</code></pre></div>
+<pre style="font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">
+<code style="font-family:inherit" class="nohighlight">
+<span style="color: #000080; text-decoration-color: #000080; font-weight: bold">usage: </span><span style="color: #800080; text-decoration-color: #800080; font-weight: bold">asli calc</span> [<span style="color: #008000; text-decoration-color: #008000">-h</span>] [<span style="color: #008000; text-decoration-color: #008000">-m </span><span style="color: #808000; text-decoration-color: #808000">[MASK]</span>] [<span style="color: #008000; text-decoration-color: #008000">-o </span><span style="color: #808000; text-decoration-color: #808000">OUTPUT</span>] [<span style="color: #008000; text-decoration-color: #008000">-e</span>] [<span style="color: #008000; text-decoration-color: #008000">-n </span><span style="color: #808000; text-decoration-color: #808000">[NUMJOBS]</span>] [<span style="color: #008000; text-decoration-color: #008000">-M </span><span style="color: #808000; text-decoration-color: #808000">[MINIMA]</span>] [<span style="color: #008000; text-decoration-color: #008000">-x</span>] [<span style="color: #008000; text-decoration-color: #008000">-t </span><span style="color: #808000; text-decoration-color: #808000">[TEMPLATE]</span>] <span style="color: #008000; text-decoration-color: #008000">[msl_files ...]</span>
+
+<span style="color: #000080; text-decoration-color: #000080; font-weight: bold">positional arguments:</span>
+  <span style="color: #008000; text-decoration-color: #008000; font-weight: bold">msl_files</span>             Path or glob pattern for file(s) containing mean sea level pressure.
+
+<span style="color: #000080; text-decoration-color: #000080; font-weight: bold">options:</span>
+  <span style="color: #008000; text-decoration-color: #008000; font-weight: bold">-h</span>, <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">--help</span>            show this help message and exit
+  <span style="color: #008000; text-decoration-color: #008000; font-weight: bold">-m</span>, <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">--mask</span> <span style="color: #808000; text-decoration-color: #808000; font-weight: bold">[MASK]</span>     Land-sea mask file path. Default: ./data/era5_lsm.nc
+  <span style="color: #008000; text-decoration-color: #008000; font-weight: bold">-o</span>, <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">--output</span> <span style="color: #808000; text-decoration-color: #808000; font-weight: bold">OUTPUT</span>   Output file path for file.
+  <span style="color: #008000; text-decoration-color: #008000; font-weight: bold">-e</span>, <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">--era5t</span>           When present, this flag enables the inclusion of ERA5T initial release data as well as finalised ERA5 data.
+  <span style="color: #008000; text-decoration-color: #008000; font-weight: bold">-n</span>, <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">--numjobs</span> <span style="color: #808000; text-decoration-color: #808000; font-weight: bold">[NUMJOBS]</span>
+                        Number of processes used by joblib in parallel calculation. Default: 1
+  <span style="color: #008000; text-decoration-color: #008000; font-weight: bold">-M</span>, <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">--minima</span> <span style="color: #808000; text-decoration-color: #808000; font-weight: bold">[MINIMA]</span>
+                        Max number of minima to locate in pressure field per time step. Default: 1
+  <span style="color: #008000; text-decoration-color: #008000; font-weight: bold">-x</span>, <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">--no-header</span>       When present, this flag disables the header in the CSV output.
+  <span style="color: #008000; text-decoration-color: #008000; font-weight: bold">-t</span>, <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">--template</span> <span style="color: #808000; text-decoration-color: #808000; font-weight: bold">[TEMPLATE]</span>
+                        Path to a custom jinja2 CSV header template file, containing the variables: calculation_version, software_version, date_created, time_coverage_start, time_coverage_end.
+
+</code>
+</pre>
+
+<h2 id="plot">plot<a class="headerlink" href="#plot" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="go">asli plot --help</span>
+</code></pre></div>
+<pre style="font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">
+<code style="font-family:inherit" class="nohighlight">
+<span style="color: #000080; text-decoration-color: #000080; font-weight: bold">usage: </span><span style="color: #800080; text-decoration-color: #800080; font-weight: bold">asli plot</span> [<span style="color: #008000; text-decoration-color: #008000">-h</span>] [<span style="color: #008000; text-decoration-color: #008000">-m </span><span style="color: #808000; text-decoration-color: #808000">[MASK]</span>] [<span style="color: #008000; text-decoration-color: #008000">-o </span><span style="color: #808000; text-decoration-color: #808000">OUTPUT</span>] [<span style="color: #008000; text-decoration-color: #008000">-i </span><span style="color: #808000; text-decoration-color: #808000">[INPUT]</span>] [<span style="color: #008000; text-decoration-color: #008000">-y </span><span style="color: #808000; text-decoration-color: #808000">[YEAR]</span>] [<span style="color: #008080; text-decoration-color: #008080">--month </span><span style="color: #808000; text-decoration-color: #808000">[MONTH]</span>] <span style="color: #008000; text-decoration-color: #008000">[msl_files ...]</span>
+
+Takes an input CSV file containing pressure minima (output from calc subcommand) and mean sea level pressure field data and plots the output to png.
+
+<span style="color: #000080; text-decoration-color: #000080; font-weight: bold">positional arguments:</span>
+  <span style="color: #008000; text-decoration-color: #008000; font-weight: bold">msl_files</span>            Path or glob pattern for file(s) containing mean sea level pressure.
+
+<span style="color: #000080; text-decoration-color: #000080; font-weight: bold">options:</span>
+  <span style="color: #008000; text-decoration-color: #008000; font-weight: bold">-h</span>, <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">--help</span>           show this help message and exit
+  <span style="color: #008000; text-decoration-color: #008000; font-weight: bold">-m</span>, <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">--mask</span> <span style="color: #808000; text-decoration-color: #808000; font-weight: bold">[MASK]</span>    Land-sea mask file path. Default: ./data/era5_lsm.nc
+  <span style="color: #008000; text-decoration-color: #008000; font-weight: bold">-o</span>, <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">--output</span> <span style="color: #808000; text-decoration-color: #808000; font-weight: bold">OUTPUT</span>  Output file path for file.
+  <span style="color: #008000; text-decoration-color: #008000; font-weight: bold">-i</span>, <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">--input</span> <span style="color: #808000; text-decoration-color: #808000; font-weight: bold">[INPUT]</span>  Path to input CSV file.
+  <span style="color: #008000; text-decoration-color: #008000; font-weight: bold">-y</span>, <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">--year</span> <span style="color: #808000; text-decoration-color: #808000; font-weight: bold">[YEAR]</span>    When present, plot only the year specified
+  <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">--month</span> <span style="color: #808000; text-decoration-color: #808000; font-weight: bold">[MONTH]</span>      When present, plot only the month specified. Requires --year to be present.
+
+</code>
+</pre>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": [], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

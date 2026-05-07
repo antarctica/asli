@@ -1,0 +1,42 @@
+
+# 
+# Amundsen Sea Low (ASL) Index version 3
+#   (derived from monthly ERA5 Reanalysis data)
+# 
+# Dr J. Scott Hosking
+#   British Antarctic Survey
+#   Twitter: @scotthosking
+# 
+# For more information see:
+#   Website: https://scotthosking.com/asl_index
+#   GitHub:  https://github.com/scotthosking/amundsen_sea_low_index
+# 
+# Column Labels:
+#   time       = YYYY-MM-01 (monthly data)
+#   SectorPres = Area-average sea level pressure over sector (170-298 E : 60-80 S)
+#   ActCenPres = Actual central pressure of ASL
+#   lon        = Longitudinal location of ASL (degrees East)
+#   lat        = Latitudinal location of ASL
+#   RelCenPres = Relative central pressure (ActCenPres 'minus' SectorPres)
+# 
+# The ASL (low pressure system) detection algorithm may be improved over time. Therefore 
+# it is recommended that the version number below is noted when using these data.
+#   ASLi_version_id = 3.20210820
+#   ASLi_software_version = 0.0.1
+#   data_version = 20240216
+# 
+# 
+
+time,lon,lat,ActCenPres,SectorPres,RelCenPrestime,lon,lat,ActCenPres,SectorPres,RelCenPres
+1979-01-01,248.25,-62.0,984.65985,986.2394,-1.5795288
+1979-02-01,192.25,-67.25,981.617,982.8373,-1.2202759
+1979-03-01,223.0,-63.75,975.45154,980.224,-4.772461
+1979-04-01,248.25,-62.0,969.45984,978.9396,-9.479736
+1979-05-01,193.0,-67.5,980.252,987.4842,-7.2321777
+1979-06-01,205.25,-65.5,971.90765,978.73083,-6.823181
+1979-07-01,213.25,-66.75,971.04596,980.61945,-9.573486
+1979-08-01,247.25,-62.25,972.3368,986.996,-14.65918
+1979-09-01,208.25,-67.0,973.02924,982.1447,-9.1154785
+1979-10-01,247.25,-62.25,973.35547,982.4196,-9.064148
+1979-11-01,192.75,-67.25,980.0264,986.5419,-6.515442
+1979-12-01,252.75,-62.0,990.90826,993.3027,-2.3944092
