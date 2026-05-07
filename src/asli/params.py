@@ -6,7 +6,7 @@ from datetime import datetime
 import importlib.metadata
 from types import MappingProxyType
 
-SOFTWARE_VERSION = importlib.metadata.version("asli")
+SOFTWARE_VERSION = importlib.metadata.version("bas-asli")
 
 # Version of the calculation method (*NOT* the package version)
 CALCULATION_VERSION = "3.20240813"
