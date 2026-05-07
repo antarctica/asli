@@ -65,7 +65,7 @@ Homepage = "https://antarctica.github.io/asli"
 Source = "https://github.com/antarctica/asli"
 Bug_Tracker = "https://github.com/antarctica/asli/issues"
 Documentation = "https://antarctica.github.io/asli"
-Changelog = "https://github.com/me/spam/blob/master/CHANGELOG.md"
+Changelog = "https://github.com/antarctica/asli/blob/main/CHANGELOG.md"
 
 [dependency-groups]
 test = [
@@ -74,7 +74,7 @@ test = [
 ]
 docs = [
     "mkdocs",
-    "mkdocs-mmaterial",
+    "mkdocs-material",
     "mkdocs-autoapi[python]",
     "mkdocstrings[python]",
     "mkdocs-include-markdown-plugin",
