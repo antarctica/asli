@@ -1,8 +1,7 @@
 # ASLI (Amundsen Sea Low Index)
 
 ![GitHub License](https://img.shields.io/github/license/antarctica/asli)
-![Python Version from PEP 621 TOML](https://img.shields.io/python/required-version-toml?tomlFilePath=https%3A%2F%2Fraw.githubusercontent.com%2Fantarctica%2Fasli%2Fpackaging%2Fpyproject.toml)
-![tests](https://github.com/antarctica/asli/actions/workflows/tests.yml/badge.svg)
+![Python Version from PEP 621 TOML](https://img.shields.io/python/required-version-toml?tomlFilePath=https%3A%2F%2Fraw.githubusercontent.com%2Fantarctica%2Fasli%2Frefs%2Fheads%2Fmain%2Fpyproject.toml)
 [![Static Badge](https://img.shields.io/badge/GitHub_repo-black?logo=github)](https://github.com/antarctica/asli)
 [![Documentation](https://img.shields.io/badge/Documentation-blue)](https://antarctica.github.io/asli/)
 
