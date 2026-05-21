@@ -444,7 +444,7 @@ class ASLICalculator:
 
             else:
                 env = Environment(
-                    loader=PackageLoader("bas-asli"), autoescape=select_autoescape()
+                    loader=PackageLoader("asli"), autoescape=select_autoescape()
                 )
                 template = env.get_template("asli_data.csv.template")
 
