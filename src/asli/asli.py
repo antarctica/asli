@@ -459,7 +459,7 @@ class ASLICalculator:
         logger.info(f"Writing csv to {filepath}")
         with open(filepath, "w") as f:
             if header:
-                f.writelines(header)
+                f.writelines(header + "\n")
             self.minima_df.to_csv(f, index=False, header=None)
 
     def import_from_csv(
