@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## 0.2.5 - 2026-05-21
+
 ### Fixed
 + Fixed jinja template package loder broken since package name change in 0.2.2.
 + Corrected units in csv output template from `hPA` to `hPa`.
