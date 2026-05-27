@@ -1,5 +1,6 @@
 # ASLI (Amundsen Sea Low Index)
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20327186.svg)](https://doi.org/10.5281/zenodo.20327186)
 ![GitHub License](https://img.shields.io/github/license/antarctica/asli)
 ![Python Version from PEP 621 TOML](https://img.shields.io/python/required-version-toml?tomlFilePath=https%3A%2F%2Fraw.githubusercontent.com%2Fantarctica%2Fasli%2Frefs%2Fheads%2Fmain%2Fpyproject.toml)
 [![Static Badge](https://img.shields.io/badge/GitHub_repo-black?logo=github)](https://github.com/antarctica/asli)
