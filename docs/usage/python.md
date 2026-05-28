@@ -130,6 +130,16 @@ These methods all return a `matplotlib` figure object.
 
 Additional arguments can be passed to all of these commands to control the plotting, for full details see `plot_month` in the [API reference](../../autoapi/asli/plot#asli.plot.Plotter.plot_month).
 
+Calculated ASLI values can also be plotted as time-series lines:
+
+```py
+fig, ax = plotter.plot_line(column="ActCenPres")
+fig, axes = plotter.plot_lines(columns=["ActCenPres", "Long", "Lat"])
+```
+
+The default `plot_lines()` output includes `ActCenPres`, `SectPres`,
+`RelCenPres`, `longitude`, and `latitude`.
+
 ## Working with Zarr and Object Storage
 The `asli` package also supports Zarr data import from s3 storage through the python interface. The method remains the same, but you will need to install the [s3] optional dependencies.
 

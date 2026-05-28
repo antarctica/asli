@@ -69,6 +69,7 @@ class TestCliPlot(unittest.TestCase):
     def setUp(self):
         self.lsm_file = str(Path("tests", "fixtures", "test_lsm.nc"))
         self.msl_file = str(Path("tests", "fixtures", "test_era5_msl.nc"))
+        self.csv_file = str(Path("tests", "fixtures", "test_csv.csv"))
 
     def tearDown(self):
         pass
@@ -94,6 +95,26 @@ class TestCliPlot(unittest.TestCase):
                 "2024",
                 "--month",
                 "4",
+                "--mask",
+                self.lsm_file,
+                self.msl_file,
+            ],
+        ):
+            cli()
+
+    def test_cli_plot_lines(self):
+        with patch(
+            "sys.argv",
+            [
+                "_",
+                "plot",
+                "--line",
+                "--line-column",
+                "ActCenPres",
+                "--line-column",
+                "Lat",
+                "--input",
+                self.csv_file,
                 "--mask",
                 self.lsm_file,
                 self.msl_file,

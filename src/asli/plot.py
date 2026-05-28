@@ -13,6 +13,29 @@ from .asli import ASLICalculator
 from .params import ASL_REGION
 
 
+LINE_PLOT_COLUMNS = ("ActCenPres", "SectPres", "RelCenPres", "longitude", "latitude")
+LINE_PLOT_ALIASES = {
+    "actcenpres": "ActCenPres",
+    "actual_central_pressure": "ActCenPres",
+    "sectpres": "SectPres",
+    "sector_pressure": "SectPres",
+    "relcenpres": "RelCenPres",
+    "relative_central_pressure": "RelCenPres",
+    "lon": "longitude",
+    "long": "longitude",
+    "longitude": "longitude",
+    "lat": "latitude",
+    "latitude": "latitude",
+}
+LINE_PLOT_LABELS = {
+    "ActCenPres": "Actual central pressure (hPa)",
+    "SectPres": "Sector pressure (hPa)",
+    "RelCenPres": "Relative central pressure (hPa)",
+    "longitude": "Longitude (degrees east)",
+    "latitude": "Latitude (degrees north)",
+}
+
+
 class Plotter:
     def __init__(
         self,
@@ -192,6 +215,104 @@ class Plotter:
             self.draw_regional_box(ax, regionbox)
 
         return fig, ax
+
+    def _line_plot_column(self, column: str) -> str:
+        """Resolve line plot column names and common aliases."""
+
+        resolved = LINE_PLOT_ALIASES.get(column.lower(), column)
+        if resolved not in self.df.columns:
+            valid = ", ".join(LINE_PLOT_COLUMNS)
+            raise ValueError(f"Column {column!r} not found. Expected one of: {valid}.")
+        return resolved
+
+    def plot_line(
+        self,
+        column: str = "ActCenPres",
+        ax: matplotlib.axes.Axes = None,
+        width: float = 10,
+        height: float = 4,
+        marker: str = "o",
+        color: str = None,
+    ):
+        """
+        Plot one calculated ASLI value as a time-series line plot.
+
+        Args:
+            column (str): Data column or alias to plot. Common choices are
+                ActCenPres, SectPres, RelCenPres, longitude, and latitude.
+            ax (matplotlib.axes.Axes, optional): axes object to use for plot.
+            width (float, optional): figure width when ax is not supplied.
+            height (float, optional): figure height when ax is not supplied.
+            marker (str, optional): matplotlib marker style.
+            color (str, optional): matplotlib line color.
+
+        Returns:
+            fig (matplotlib.figure.Figure): figure object
+            ax (matplotlib.axes.Axes): axis object
+        """
+
+        column = self._line_plot_column(column)
+        plot_df = self.df.copy()
+        plot_df["time"] = pd.to_datetime(plot_df["time"])
+        plot_df.sort_values("time", inplace=True)
+
+        if ax is None:
+            fig = matplotlib.figure.Figure(figsize=(width, height))
+            ax = fig.add_subplot()
+        else:
+            fig = ax.get_figure()
+
+        plot_kwargs = {"marker": marker}
+        if color is not None:
+            plot_kwargs["color"] = color
+        ax.plot(plot_df["time"], plot_df[column], **plot_kwargs)
+        ax.set_xlabel("Time")
+        ax.set_ylabel(LINE_PLOT_LABELS.get(column, column))
+        ax.set_title(LINE_PLOT_LABELS.get(column, column))
+        fig.autofmt_xdate()
+
+        return fig, ax
+
+    def plot_lines(
+        self,
+        columns: list[str] = None,
+        n_cols: int = 1,
+        width: float = None,
+        height: float = None,
+        marker: str = "o",
+    ):
+        """
+        Plot multiple calculated ASLI values as stacked time-series line plots.
+
+        Args:
+            columns (list[str], optional): Data columns or aliases to plot.
+                Defaults to ActCenPres, SectPres, RelCenPres, longitude, and latitude.
+            n_cols (int, optional): Number of subplot columns. Defaults to 1.
+            width (float, optional): Figure width. Defaults from n_cols.
+            height (float, optional): Figure height. Defaults from row count.
+            marker (str, optional): matplotlib marker style.
+
+        Returns:
+            fig (matplotlib.figure.Figure): figure object
+            axes (list[matplotlib.axes.Axes]): line plot axes
+        """
+
+        columns = list(columns) if columns is not None else list(LINE_PLOT_COLUMNS)
+        columns = [self._line_plot_column(column) for column in columns]
+        n_rows = math.ceil(len(columns) / n_cols)
+        fig = matplotlib.figure.Figure(
+            figsize=(width or n_cols * 10, height or n_rows * 3)
+        )
+
+        axes = []
+        for i, column in enumerate(columns):
+            ax = fig.add_subplot(n_rows, n_cols, i + 1)
+            self.plot_line(column=column, ax=ax, marker=marker)
+            axes.append(ax)
+
+        fig.tight_layout()
+
+        return fig, axes
 
     def plot_da(self, da: xr.DataArray, n_cols: int = 3, *args, **kwargs):
         """Plot all the months in the given DataArray, da.

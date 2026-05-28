@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
++ Line plots for calculated ASLI values in the Python API and CLI.
+
 ## 0.2.7 - 2026-05-28
 
 ### Added

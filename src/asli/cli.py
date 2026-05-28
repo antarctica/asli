@@ -64,7 +64,10 @@ def _cli_plot(args):
 
     # Plot all if no specific year is provided
     plotter = Plotter(a)
-    if args.month and args.year:
+    if args.line:
+        logger.info(f"Plotting ASLI line plots from {args.msl_files}.")
+        fig, _ = plotter.plot_lines(columns=args.line_columns)
+    elif args.month and args.year:
         logger.info(f"Plotting for {args.year}-{args.month} from {args.msl_files}.")
         fig, _ = plotter.plot_month(year=args.year, month=args.month, colorbar=True)
     elif args.year:
@@ -330,6 +333,17 @@ def _top_level_parser() -> argparse.ArgumentParser:
         nargs="?",
         type=_validate_month,
         help="When present, plot only the month specified. Requires --year to be present.",
+    )
+    plot_parser.add_argument(
+        "--line",
+        action="store_true",
+        help="Plot calculated ASLI values as time-series lines instead of pressure maps.",
+    )
+    plot_parser.add_argument(
+        "--line-column",
+        dest="line_columns",
+        action="append",
+        help="Column or alias to include with --line. May be repeated.",
     )
 
     return parser
