@@ -90,3 +90,17 @@ asli plot --input asli_1959-2026.csv --output asli_1959-2026.png --year 2025 --m
 With the output file:
 
 ![](../assets/images/asli_plot_Apr2025.png)
+
+To plot calculated ASLI values such as central pressure, longitude, and latitude
+as line plots, add `--line`. By default this includes `ActCenPres`, `SectPres`,
+`RelCenPres`, `longitude`, and `latitude`.
+
+```sh
+asli plot --line --input asli_1959-2026.csv --output asli_1959-2026_lines.png ./data/era5/monthly/era5_mean_sea_level_pressure_monthly_1959-2026.nc
+```
+
+Use repeated `--line-column` options to choose specific values:
+
+```sh
+asli plot --line --line-column ActCenPres --line-column Lat --input asli_1959-2026.csv --output asli_1959-2026_pressure_lat.png ./data/era5/monthly/era5_mean_sea_level_pressure_monthly_1959-2026.nc
+```

@@ -41,3 +41,17 @@ class TestPlotting(unittest.TestCase):
 
         assert isinstance(fig, matplotlib.figure.Figure)
         assert isinstance(ax, matplotlib.axes.Axes)
+
+    def test_plot_line(self):
+        fig, ax = self.plotter.plot_line(column="ActCenPres")
+
+        assert isinstance(fig, matplotlib.figure.Figure)
+        assert isinstance(ax, matplotlib.axes.Axes)
+        assert ax.get_ylabel() == "Actual central pressure (hPa)"
+
+    def test_plot_lines(self):
+        fig, axes = self.plotter.plot_lines(columns=["ActCenPres", "Long", "Lat"])
+
+        assert isinstance(fig, matplotlib.figure.Figure)
+        assert len(axes) == 3
+        assert all(isinstance(ax, matplotlib.axes.Axes) for ax in axes)
