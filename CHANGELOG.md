@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
++ Note on known issue in ERA5 May-Oct 1996 which affects the Amundsen Sea.
+
 ## 0.2.6 - 2026-05-21
 
 ### Fixed
