@@ -193,10 +193,10 @@ def define_minima_per_time_in_region(
     """
     ### select only those points within ASL box
     df2 = df[
-        (df["longitude"] > region["west"])
-        & (df["longitude"] < region["east"])
-        & (df["latitude"] > region["south"])
-        & (df["latitude"] < region["north"])
+        (df["longitude"] >= region["west"])
+        & (df["longitude"] <= region["east"])
+        & (df["latitude"] >= region["south"])
+        & (df["latitude"] <= region["north"])
     ]
 
     if not output_all_minima:
